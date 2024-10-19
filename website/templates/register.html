@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block title %}| register{% endblock %}
+
+{% block body %}
+<div style="padding-top: 8px;">
+  <div class="container">
+    <div id="login-row" class="row justify-content-center align-items-center">
+      <div id="login-column" class="col-md-6">
+        <div id="login-box" class="col-md-12">
+          <form method="POST" class="form">
+            <h3 style="text-align: center;">Register</h3>
+            <div class="form-group">
+              <label for="email">Email Address</label>
+              <input type="email" class="form-control" id="email" name="email" placeholder="email" />
+              <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" class="form-control" id="username" name="username" placeholder="username" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="first_name">First Name</label>
+              <input type="text" class="form-control" id="first_name" name="first_name" placeholder="first name" />
+            </div>
+            <div class="form-group">
+              <label for="last_name">Last Name</label>
+              <input type="text" class="form-control" id="last_name" name="last_name" placeholder="last name" />
+            </div>
+            <div class="form-group">
+              <label for="password1">Password</label>
+              <input type="password" class="form-control" id="password1" name="password1" placeholder="password" />
+            </div>
+            <div class="form-group">
+              <label for="password2">Password (Confirm)</label>
+              <input type="password" class="form-control" id="password2" name="password2"
+                placeholder="confirm password" />
+            </div>
+            <div class="form-group">
+              <div class="text-center">
+                <button type="submit" class="btn btn-primary">Register</button>
+              </div>
+              <div id="login-link" class="text-center" style="padding-top: 4px;">
+                <p>Already have an account? <a style="color: blue;" href="/login">Login</a></p>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

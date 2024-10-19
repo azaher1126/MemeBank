@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+{% block body %}
+<script>
+  page_num = 1;
+  function isInViewport(element) {
+    const rect = element.getBoundingClientRect();
+    return (
+      rect.top >= 0 &&
+      rect.left >= 0 &&
+      rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+      rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+    );
+  }
+  function load_new_page() {
+    img = document.getElementById('like_button' + str(40 + 50 * page_num - 1));
+    if (isInViewport(img) == true) {
+      page_num += 1;
+      var xmlHttp = new XMLHttpRequest();
+      xmlHttp.open("GET", `/getpage?num=${page_num}`);
+      xmlHttp.send(null);
+      memes = JSON.parse(xmlHttp.responseText)
+      body = document.getElementById('memes');
+      for (meme in memes) {
+        body.innerHTML += '<div class="meme"><div><a href="/profile/' + meme.username + '"><p>' + meme.username + '</p></a><a href="/meme/' + meme.id + '" style="text-decoration: none"><img class="rounded" style="margin-top: -16px;" src="' + meme.url + '" width="300px" height="300px"></a><p id="tags" style="float: left;">Tags: ';
+        for (tag in meme.tags) {
+          body.innerHTML += tag + ' ';
+        }
+        body.innerHTML += '</p><div style="float: right;">'
+        if ({{ current_user.id}} in meme.liked) {
+        body.innerHTML += '<a id="like_button' + meme.id + '" href="javascript:unlike(' + meme.id + ')" style="float:left;"><span id="heart' + meme.id + '" class="fas fa-heart" aria-hidden="true"></span></a>';
+      } else {
+        body.innerHTML += '<a id="like_button' + meme.id + '" href="javascript:like(' + meme.id + ')" style="float:left;"><span id="heart' + meme.id + '" class="far fa-heart" aria-hidden="true"></span></a>';
+      }
+      body.innerHTML += '<p id="like_count' + meme.id + '" style="float: left;">' + meme.likes + '</p></div></div></div>';
+    }
+  }
+  }
+
+  document.addEventListener('scroll', function () {
+    load_new_page()
+  }, {
+    passive: true
+  });
+</script>
+<style>
+  button p {
+    font-family: Roboto;
+    margin-bottom: -24px;
+  }
+</style>
+<!-- Page content -->
+<div class="container-fluid">
+  <div class="row justify-content-start">
+    <div class="col-2">
+      <!--First Col-->
+      <div class="bg-dark rounded" style="margin-top: 16px;">
+        <h4 style="margin-left: 16px; padding-top: 8px;">Popular Tags</h4>
+        <ul class="nav nav-pills flex-column mb-auto" style="margin-left: 24px; padding-bottom: 8px;">
+          <li class="nav-item">
+            <form action="/search" method="post">
+              <button type="submit" name="search" value="gif" class="link-button">
+                <p>gif</p>
+              </button>
+            </form>
+          </li>
+          <li class="nav-item">
+            <form action="/search" method="post">
+              <button type="submit" name="search" value="funny" class="link-button">
+                <p>funny</p>
+              </button>
+            </form>
+          </li>
+          <li class="nav-item">
+            <form action="/search" method="post">
+              <button type="submit" name="search" value="facebook" class="link-button">
+                <p>facebook</p>
+              </button>
+            </form>
+          </li>
+          <li class="nav-item">
+            <form action="/search" method="post">
+              <button type="submit" name="search" style='color: blue;' value="cursed" class="link-button">
+                <p>cursed</p>
+              </button>
+            </form>
+          </li>
+          <li class="nav-item">
+            <form action="/search" method="post">
+              <button type="submit" name="search" value="deepFRIED" class="link-button">
+                <p>deepFRIED</p>
+              </button>
+            </form>
+          </li>
+          <li class="nav-item">
+            <form action="/search" method="post">
+              <button type="submit" name="search" value="NSFW" class="link-button">
+                <p>NSFW</p>
+              </button>
+            </form>
+          </li>
+          <li class="nav-item">
+            <form action="/search" method="post">
+              <button type="submit" name="search" value="coding" class="link-button">
+                <p>coding</p>
+              </button>
+            </form>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div id='memes' class="col">
+      {% for meme in memes %}
+      <div class="meme">
+        <div>
+          <a href="/profile/{{meme.username}}">
+            <p {% if meme.username=='azaher1126' %} style="color: gold;" {% endif %}>{{meme.username}}</p>
+          </a>
+          <a href="/meme/{{meme.id}}" style="text-decoration: none">
+            <img class="rounded" style="margin-top: -16px;" src="{{meme.url}}" width="300px" height="300px">
+          </a>
+          <p id="tags" style="float: left;">
+            Tags: {% for tag in meme.tags %} {{tag}} {% endfor %}
+          </p>
+          <div style="float: right;">
+            {% if current_user.id in meme.liked %}
+            <a id='like_button{{meme.id}}' href="javascript:unlike({{meme.id}})" style="float:left;">
+              <span id='heart{{meme.id}}' class="fas fa-heart" aria-hidden="true"></span>
+            </a>
+            {% else %}
+            <a id='like_button{{meme.id}}' href="javascript:like({{meme.id}})" style="float:left;"><span
+                id='heart{{meme.id}}' class="far fa-heart" aria-hidden="true"></span></a>
+            {% endif %}
+            <p id='like_count{{meme.id}}' style="float: left;">{{meme.likes}}</p>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  {% endblock %}

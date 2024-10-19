@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<div style="text-align: center;">
+<div style="text-align: center; margin-top: 8px;">
+  <img class="rounded" style="max-width: 100%;  max-height: 70vh;" src="../{{meme.url}}">
+</div>
+<div style="max-width: 400px; margin:auto;">
+  <p id="tags" style="float: left;">
+    Tags: {% for tag in meme.tags %} {{tag}} {% endfor %}
+  </p>
+  <div style="float: right;">
+    {% if current_user.id in meme.liked %}
+    <a id='like_button{{meme.id}}' href="javascript:unlike({{meme.id}})" style="float:right;">
+      <span id='heart{{meme.id}}' class="fas fa-heart" aria-hidden="true"></span>
+    </a>
+    {% else %}
+    <a id='like_button{{meme.id}}' href="javascript:like({{meme.id}})" style="float:right;"><span id='heart{{meme.id}}'
+        class="far fa-heart" aria-hidden="true"></span></a>
+    {% endif %}
+    <p id='like_count{{meme.id}}' style="float: right;">{{meme.likes}}</p>
+  </div>
+  <p>{{ meme.date }}</p>
+</div>
+<a href="../{{meme.url}}" download="meme{{meme.id}}" class="btn btn-primary">Download</a>
+</div>
+
+{% endblock %}
