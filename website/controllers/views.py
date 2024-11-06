@@ -3,8 +3,9 @@ from flask import Blueprint, render_template, request, redirect, flash, abort
 from flask_login import login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask.helpers import url_for
-from .models import Meme, User
-from . import db
+from ..models.user_model import User
+from ..models.meme_model import Meme
+from ..models import db
 import os
 import json
 
