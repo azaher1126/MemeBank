@@ -1,0 +1,12 @@
+.meme-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.meme {
+    margin: 0.5rem;
+    width: 300px;
+}
+.meme img {
+    aspect-ratio: 1;
+}

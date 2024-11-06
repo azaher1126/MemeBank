@@ -1,9 +1,11 @@
 {% extends 'base.html' %}
+{% import "components/meme-components.html" as meme_comps %}
 
 {% block title %}Home{% endblock %}
 
 {% block head %}
 {{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/meme-style.css') }}">
 <style>
   .link-button {
     background: none;
@@ -98,32 +100,9 @@
         </ul>
       </div>
     </div>
-    <div id='memes' class="col">
+    <div id='memes' class="col meme-container">
       {% for meme in memes %}
-      <div class="meme">
-        <div>
-          <a href="/profile/{{meme.username}}">
-            <p {% if meme.username=='azaher1126' %} style="color: gold;" {% endif %}>{{meme.username}}</p>
-          </a>
-          <a href="/meme/{{meme.id}}" style="text-decoration: none">
-            <img class="rounded" style="margin-top: -16px;" src="{{meme.url}}" width="300px" height="300px">
-          </a>
-          <p id="tags" style="float: left;">
-            Tags: {% for tag in meme.tags %} {{tag}} {% endfor %}
-          </p>
-          <div style="float: right;">
-            {% if current_user.id in meme.liked %}
-            <a id='like_button{{meme.id}}' href="javascript:unlike({{meme.id}})" style="float:left;">
-              <span id='heart{{meme.id}}' class="fas fa-heart" aria-hidden="true"></span>
-            </a>
-            {% else %}
-            <a id='like_button{{meme.id}}' href="javascript:like({{meme.id}})" style="float:left;"><span
-                id='heart{{meme.id}}' class="far fa-heart" aria-hidden="true"></span></a>
-            {% endif %}
-            <p id='like_count{{meme.id}}' style="float: left;">{{meme.likes}}</p>
-          </div>
-        </div>
-      </div>
+        {{ meme_comps.meme_preview(meme, current_user) }}
       {% endfor %}
     </div>
   </div>
