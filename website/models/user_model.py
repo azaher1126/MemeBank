@@ -1,13 +1,11 @@
-from . import db
-from flask_login import UserMixin
+from .meme_model import MemeType
 
-class User(db.Model, UserMixin):
-    __tablename__ = 'Users'
-    id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(150), unique=True)
-    password = db.Column(db.String(150))
-    username = db.Column(db.String(150), unique=True)
-    first_name = db.Column(db.String(150))
-    last_name = db.Column(db.String(150))
-    memes = db.relationship('Meme')
-    default_sorting = db.Column(db.Integer)
+class UserType():
+
+    def __init__(self, user):
+        self.id = user.id
+        self.email = user.email
+        self.first_name = user.first_name
+        self.last_name = user.last_name
+        self.username = user.username
+        self.memes = MemeType.convert_to_memetype(user.memes)

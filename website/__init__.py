@@ -3,7 +3,7 @@ from flask_login import LoginManager
 from os import path
 
 from .controllers import intialize_controllers
-from .models import initialize_database
+from .database import initialize_database
 
 DB_PATH = path.join(path.dirname(path.realpath(__file__)), 'database.db')
 
@@ -20,7 +20,7 @@ def create_app():
     login_manager.login_view = 'views.login'
     login_manager.init_app(app)
 
-    from .models.user_model import User
+    from .database.user_model import User
     @login_manager.user_loader
     def load_user(id):
         return User.query.get(int(id))
