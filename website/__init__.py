@@ -4,13 +4,13 @@ from flask_login import LoginManager
 from os import path
 
 db = SQLAlchemy()
-DB_NAME = "database.db"
+DB_PATH = path.join(path.dirname(path.realpath(__file__)), 'database.db')
 
 def create_app():
     '''Creats the server instance and sets up all views and databses.'''
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'memebank'
-    app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
+    app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_PATH}'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.init_app(app)
 
@@ -30,8 +30,9 @@ def create_app():
 
     return app
 
-def create_database(app):
-    '''Initilizes the databse file and sets up the table.'''
-    if not path.exists('website/' + DB_NAME):
-        db.create_all(app=app)
-        print('Created!')
+def create_database(app: Flask):
+    with app.app_context():
+        '''Initilizes the databse file and sets up the table.'''
+        if not path.exists(DB_PATH):
+            db.create_all()
+            print('Created!')

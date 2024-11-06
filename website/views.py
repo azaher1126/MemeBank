@@ -13,7 +13,7 @@ views = Blueprint('views',__name__)
 @views.route('/')
 def home():
     '''Displays and passes all memes to the home page.'''
-    memes = Meme.query.order_by(desc(Meme.date)).paginate(1,50).items
+    memes = Meme.query.order_by(desc(Meme.date)).paginate(page=1,per_page=50).items
     memesT = convert_to_memetype(memes)
     return render_template('home.html', memes=memesT)
 
@@ -23,7 +23,7 @@ def get_page():
     if num == 0:
         abort(404)
     tags = request.args.get('search', None)
-    memes = Meme.query.order_by(desc(Meme.date)).paginate(int(num),50,error_out=False).items
+    memes = Meme.query.order_by(desc(Meme.date)).paginate(page=int(num),per_page=50,error_out=False).items
     if search != None:
         memes = search(tags,num)
     if len(memes) == 0:
@@ -202,7 +202,7 @@ def settings():
 def search(tags, page_num):
     multi_memes = []
     for tag in tags.split():
-        memes = Meme.query.filter(Meme.tags.contains(tag)).paginate(page_num,50).items
+        memes = Meme.query.filter(Meme.tags.contains(tag)).paginate(page=page_num,per_page=50).items
         multi_memes.append(memes)
     return combine_memes(multi_memes)
      
