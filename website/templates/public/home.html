@@ -1,4 +1,28 @@
 {% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block head %}
+{{ super() }}
+<style>
+  .link-button {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 1em;
+    font-family: Roboto;
+    padding: 6px;
+}
+.cursed {
+  color: blue;
+}
+.link-button:focus {
+    outline: none;
+}
+</style>
+{% endblock %}
+
 {% block body %}
 <script>
   page_num = 1;
@@ -42,12 +66,6 @@
     passive: true
   });
 </script>
-<style>
-  button p {
-    font-family: Roboto;
-    margin-bottom: -24px;
-  }
-</style>
 <!-- Page content -->
 <div class="container-fluid">
   <div class="row justify-content-start">
@@ -57,53 +75,25 @@
         <h4 style="margin-left: 16px; padding-top: 8px;">Popular Tags</h4>
         <ul class="nav nav-pills flex-column mb-auto" style="margin-left: 24px; padding-bottom: 8px;">
           <li class="nav-item">
-            <form action="/search" method="GET">
-              <button type="submit" name="search" value="gif" class="link-button">
-                <p>gif</p>
-              </button>
-            </form>
+            <a href="/search?search=gif" class="link-button">gif</a>
           </li>
           <li class="nav-item">
-            <form action="/search" method="GET">
-              <button type="submit" name="search" value="funny" class="link-button">
-                <p>funny</p>
-              </button>
-            </form>
+            <a href="/search?search=funny" class="link-button">funny</a>
           </li>
           <li class="nav-item">
-            <form action="/search" method="GET">
-              <button type="submit" name="search" value="facebook" class="link-button">
-                <p>facebook</p>
-              </button>
-            </form>
+            <a href="/search?search=facebook" class="link-button">facebook</a>
           </li>
           <li class="nav-item">
-            <form action="/search" method="GET">
-              <button type="submit" name="search" style='color: blue;' value="cursed" class="link-button">
-                <p>cursed</p>
-              </button>
-            </form>
+            <a href="/search?search=cursed" class="link-button cursed">cursed</a>
           </li>
           <li class="nav-item">
-            <form action="/search" method="GET">
-              <button type="submit" name="search" value="deepFRIED" class="link-button">
-                <p>deepFRIED</p>
-              </button>
-            </form>
+            <a href="/search?search=deepFRIED" class="link-button">deepFRIED</a>
           </li>
           <li class="nav-item">
-            <form action="/search" method="GET">
-              <button type="submit" name="search" value="NSFW" class="link-button">
-                <p>NSFW</p>
-              </button>
-            </form>
+            <a href="/search?search=NSFW" class="link-button">NSFW</a>
           </li>
           <li class="nav-item">
-            <form action="/search" method="GET">
-              <button type="submit" name="search" value="coding" class="link-button">
-                <p>coding</p>
-              </button>
-            </form>
+            <a href="/search?search=coding" class="link-button">coding</a>
           </li>
         </ul>
       </div>
