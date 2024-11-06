@@ -17,7 +17,7 @@ def create_app():
     intialize_controllers(app)
 
     login_manager = LoginManager()
-    login_manager.login_view = 'views.login'
+    login_manager.login_view = 'account.login'
     login_manager.init_app(app)
 
     from .database.user_model import User

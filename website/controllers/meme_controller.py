@@ -28,7 +28,7 @@ def get_page():
 @login_required
 def upload():
     '''Displays the upload page.'''
-    return render_template('upload.html')
+    return render_template('meme/upload.html')
 
 @meme_blueprint.route('/upload',methods=['POST'])
 @login_required
@@ -39,7 +39,7 @@ def upload_file():
     tagtext = request.form.get('tags')
     if file.filename == '' or tagtext == '':
         flash('Didn\'t submit required infromation!', category='error')
-        return redirect(url_for('views.home'))
+        return redirect(url_for('public.home'))
     extention = os.path.splitext(file.filename)[1]
     memes = Meme.query.all()
     id = 0
@@ -55,7 +55,7 @@ def upload_file():
     db.session.add(meme)
     db.session.commit()
     flash('Meme Succefully Uploaded!', category='success')
-    return redirect(url_for('views.home'))
+    return redirect(url_for('public.home'))
 
 @meme_blueprint.route('/meme/<path:id>')
 def view_meme(id):
@@ -63,7 +63,7 @@ def view_meme(id):
     passes the meme data to the page'''
     meme = Meme.query.filter_by(id=id).first()
     memeT = MemeType(meme)
-    return render_template('meme.html',meme=memeT)
+    return render_template('meme/meme.html',meme=memeT)
 
 @meme_blueprint.route('/like', methods=['POST'])
 def like():
@@ -104,11 +104,11 @@ def search():
     tags = request.form.get('search')
     if tags == '':
         flash('Invaild Search!', category='error')
-        return redirect(url_for('views.home'))
+        return redirect(url_for('public.home'))
     combined_memes = search(tags,1)
     memesT = MemeType.convert_to_memetype(combined_memes)
     result = {'search': tags, 'memes': memesT}
-    return render_template('search.html', res=result)
+    return render_template('meme/search.html', res=result)
 
 def search(tags, page_num):
     multi_memes = []

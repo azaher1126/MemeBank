@@ -10,9 +10,9 @@ def home():
     '''Displays and passes all memes to the home page.'''
     memes = Meme.query.order_by(desc(Meme.date)).paginate(page=1,per_page=50).items
     memesT = MemeType.convert_to_memetype(memes)
-    return render_template('home.html', memes=memesT)
+    return render_template('public/home.html', memes=memesT)
 
 @public_blueprint.route('/about')
 def about():
     '''Displays the credits page'''
-    return render_template('about.html')
+    return render_template('public/about.html')

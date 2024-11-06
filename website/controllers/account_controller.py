@@ -43,9 +43,9 @@ def register():
             db.session.commit()
             login_user(new_user, remember=False)
             flash('Account created!', category='success')
-            return redirect(url_for('views.home'))
+            return redirect(url_for('public.home'))
 
-    return render_template("register.html", user=current_user)
+    return render_template("account/register.html", user=current_user)
 
 @account_blueprint.route('/login', methods=['GET', 'POST'])
 def login():
@@ -58,18 +58,18 @@ def login():
             if check_password_hash(user.password, password):
                 flash('Logged in successfully!', category='success')
                 login_user(user, remember=rememeber_me)
-                return redirect(url_for('views.home'))
+                return redirect(url_for('public.home'))
             else:
                 flash('Incorrect password, try again.', category='error')
         else:
             flash('Email does not exist.', category='error')
-    return render_template("login.html", user=current_user)
+    return render_template("account/login.html", user=current_user)
 
 @account_blueprint.route('/logout')
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('views.login'))
+    return redirect(url_for('account.login'))
 
 @account_blueprint.route('/forget_password')
 def forget_password():
@@ -79,9 +79,9 @@ def forget_password():
 def profile(username):
     user = User.query.filter_by(username=username).first()
     userT = UserType(user)
-    return render_template('profile.html',user=userT)
+    return render_template('account/profile.html',user=userT)
 
 @account_blueprint.route('/settings')
 @login_required
 def settings():
-    return render_template('settings.html')
+    return render_template('account/settings.html')
