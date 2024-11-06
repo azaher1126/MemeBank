@@ -94,15 +94,15 @@ def unlike():
     else:
         return 'Login'
 
-@meme_blueprint.route('/search', methods=['POST'])
+@meme_blueprint.route('/search', methods=['GET'])
 def search():
     '''Gets the string that the user would like to search with then 
     splits it into individual tags and searches the database for each tag.
     It combines each list of memes into one list and runs combine_memes and then 
     convert_to_memetype on the combined list and displays and passes the memes 
     to the search page.'''
-    tags = request.form.get('search')
-    if tags == '':
+    tags = request.args.get('search')
+    if not tags or tags == '':
         flash('Invaild Search!', category='error')
         return redirect(url_for('public.home'))
     combined_memes = search(tags,1)
