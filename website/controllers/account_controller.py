@@ -1,6 +1,6 @@
 from sqlalchemy import or_
 from flask import Blueprint, render_template, request, redirect, flash
-from flask_login import login_user, login_required, logout_user, current_user
+from flask_login import login_user, login_required, logout_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask.helpers import url_for
 from ..database.user_model import User
@@ -41,11 +41,11 @@ def register():
             new_user = User(email=email, username=username, first_name=first_name, last_name=last_name, password=generate_password_hash(password1, method='sha256'))
             db.session.add(new_user)
             db.session.commit()
-            login_user(new_user, remember=False)
+            login_user(new_user)
             flash('Account created!', category='success')
             return redirect(url_for('public.home'))
 
-    return render_template("account/register.html", user=current_user)
+    return render_template("account/register.html")
 
 @account_blueprint.route('/login', methods=['GET', 'POST'])
 def login():
@@ -63,17 +63,18 @@ def login():
                 flash('Incorrect password, try again.', category='error')
         else:
             flash('Email does not exist.', category='error')
-    return render_template("account/login.html", user=current_user)
+    return render_template("account/login.html")
 
 @account_blueprint.route('/logout')
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('account.login'))
+    flash("Successfully logged out.", 'success')
+    return redirect(url_for('public.home'))
 
 @account_blueprint.route('/forget_password')
 def forget_password():
-    return render_template('forget_password.html')
+    return render_template('account/forget_password.html')
 
 @account_blueprint.route('/profile/<path:username>')
 def profile(username):
