@@ -115,51 +115,16 @@ def search():
         return render_template('meme/search.html', res=result)
     return render_template('components/meme_page.html', memes=memesT)
 
-def search(tags, last_id: int | None):
+def search(tags: str, last_id: int | None):
     multi_memes = []
-    for tag in tags.split():
-        dbTag = db.session.query(Tag).filter(Tag.name == tag).scalar()
-        if not dbTag:
-            continue
-        if not last_id:
-            memes = db.session.query(Meme).order_by(desc(Meme.date)).filter(Meme.tags.contains(dbTag)).limit(20).all()
-            multi_memes.append(memes)
-        else:
-            last_meme = db.session.query(Meme).filter(Meme.id == last_id).first()
-            if not last_meme:
-                continue
-            memes = db.session.query(Meme).order_by(desc(Meme.date)).filter(and_(Meme.id < last_meme.id, Meme.tags.contains(dbTag))).limit(20).all()
-            multi_memes.append(memes)
-    return combine_memes(multi_memes)   
-
-def combine_memes(memeslist):
-    '''Takes a list of sublists of memes from the database and combines
-    them into one list retaining the order of the sublists.'''
-    maxlength = 0
-    for memes in memeslist:
-        if len(memes) > maxlength:
-            maxlength = len(memes)
-    results = []
-    result_ids = []
-    for i in range(maxlength):
-        for memes in memeslist:
-            if i < len(memes):
-                if memes[i].id not in result_ids:
-                    result_ids.append(memes[i].id)
-                    results.append(memes[i])
-    return sort_combined_memes(results)
-
-def sort_combined_memes(memes):
-    if len(memes) < 2:
-        return memes
-    smaller = []
-    larger = []
-    equal = []
-    for meme in memes:
-        if memes[0].date > meme.date:
-            smaller.append(meme)
-        elif memes[0].date < meme.date:
-            larger.append(meme)
-        elif memes[0].date == meme.date:
-            equal.append(meme)
-    return sort_combined_memes(larger) + equal + sort_combined_memes(smaller)
+    split_tags = tags.split()
+    db_tags = db.session.query(Tag).filter(Tag.name.in_(split_tags)).all()
+    if len(db_tags) == 0:
+        return multi_memes
+    
+    tag_ids = [db_tag.id for db_tag in db_tags]
+    if not last_id:
+        db_memes = db.session.query(Meme).filter(Meme.tags.any(Tag.id.in_(tag_ids))).order_by(desc(Meme.date)).limit(20).all()
+        return db_memes
+    db_memes = db.session.query(Meme).filter(and_(Meme.id < last_id, Meme.tags.any(Tag.id.in_(tag_ids)))).order_by(desc(Meme.date)).limit(20).all()
+    return db_memes
