@@ -1,4 +1,15 @@
-{% macro meme_preview(meme, current_user) %}
+{% macro meme_tags(tags) %}
+<div class="tag-container">
+    <p>
+        Tags:
+    </p>
+    {% for tag in tags %}
+        <a href="/search?search={{ tag.name }}">{{ tag.name }}</a>
+    {% endfor %}
+</div> 
+{% endmacro %}
+
+{% macro meme_preview(meme) %}
 <div class="meme">
     <a href="/profile/{{meme.username}}">
         <p {% if meme.username == 'azaher1126' %} style="color: gold;" {% endif %}>{{meme.username}}</p>
@@ -6,19 +17,19 @@
     <a href="/meme/{{meme.id}}" style="text-decoration: none">
         <img class="rounded" src="{{meme.url}}" width="300px" height="300px">
     </a>
-    <p id="tags" style="float: left;">
-        Tags: {% for tag in meme.tags %} {{tag.name}} {% endfor %}
-    </p>
-    <div style="float: right;">
-        {% if meme.liked %}
-        <button class="like-button" id='like_button{{meme.id}}' onclick="unlike('{{meme.id}}')" style="float:left;">
-            <span id='heart{{meme.id}}' class="fas fa-heart" aria-hidden="true"></span>
-        </button>
-        {% else %}
-        <button class="like-button" id='like_button{{meme.id}}' onclick="like('{{ meme.id }}')" style="float:left;"><span
-                id='heart{{meme.id}}' class="far fa-heart" aria-hidden="true"></span></button>
-        {% endif %}
-        <p id='like_count{{meme.id}}' style="float: left;">{{meme.likes}}</p>
+    <div class="meme-description">
+        {{ meme_tags(meme.tags) }}
+        <div class="like-container">
+            {% if meme.liked %}
+            <button class="like-button" id='like_button{{meme.id}}' onclick="unlike('{{meme.id}}')">
+                <span id='heart{{meme.id}}' class="fas fa-heart" aria-hidden="true"></span>
+            </button>
+            {% else %}
+            <button class="like-button" id='like_button{{meme.id}}' onclick="like('{{ meme.id }}')"><span
+                    id='heart{{meme.id}}' class="far fa-heart" aria-hidden="true"></span></button>
+            {% endif %}
+            <p id='like_count{{meme.id}}' style="float: left;">{{meme.likes}}</p>
+        </div>
     </div>
 </div>
 {% endmacro %}

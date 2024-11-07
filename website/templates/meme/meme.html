@@ -1,35 +1,42 @@
 {% extends 'base.html' %}
+{% import "components/meme-components.html" as meme_comps %}
 
 {% block title %}Meme{% endblock %}
 
 {% block head %}
 {{ super() }}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/meme-style.css') }}">
+<style>
+  .meme-detailed {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .meme-description p {
+    margin: 0;
+  }
+</style>
 {% endblock %}
 
 {% block body %}
-<div class="text-center">
-<div class="text-center mt-2">
+<div class="meme-detailed mt-2">
   <img class="rounded mw-100" style="max-height: 70vh;" src="../{{meme.url}}">
-  <div class="m-auto w-100" style="max-width: 400px;">
-    <p id="tags" style="float: left;">
-      Tags: {% for tag in meme.tags %} {{tag.name}} {% endfor %}
-    </p>
-    <div style="float: right;">
+  <div class="meme-description">
+    {{ meme_comps.meme_tags(meme.tags) }}
+    <p>{{ meme.date }}</p>
+    <div class="like-container">
       {% if meme.liked %}
-      <button class="like-button" id='like_button{{meme.id}}' onclick="unlike('{{meme.id}}')" style="float:right;">
+      <button class="like-button" id='like_button{{meme.id}}' onclick="unlike('{{meme.id}}')">
         <span id='heart{{meme.id}}' class="fas fa-heart" aria-hidden="true"></span>
       </button>
       {% else %}
-      <button class="like-button" id='like_button{{meme.id}}' onclick="like('{{meme.id}}')" style="float:right;"><span id='heart{{meme.id}}'
+      <button class="like-button" id='like_button{{meme.id}}' onclick="like('{{meme.id}}')"><span id='heart{{meme.id}}'
           class="far fa-heart" aria-hidden="true"></span></button>
       {% endif %}
       <p id='like_count{{meme.id}}' style="float: right;">{{meme.likes}}</p>
     </div>
-    <p>{{ meme.date }}</p>
   </div>
-</div>
-<a href="../{{meme.url}}" download="meme{{meme.id}}" class="btn btn-primary">Download</a>
+  <a href="../{{meme.url}}" download="meme{{meme.id}}" class="btn btn-primary">Download</a>
 </div>
 
 {% endblock %}
