@@ -3,6 +3,7 @@ from flask import Blueprint, render_template, request, redirect, flash, abort
 from flask_login import login_required, current_user
 from flask.helpers import url_for
 from ..database.meme_model import Meme
+from ..database.tag_model import Tag
 from ..database import db
 from ..models.meme_model import MemeType
 import os
@@ -51,7 +52,15 @@ def upload_file():
         os.chdir('website/templates')
     path = '../static/memes/meme'+str(id)+extention
     file.save(path)
-    meme = Meme(url=path,tags=tagtext, user_id=current_user.id, username=current_user.username)
+    tags = tagtext.split()
+    saved_tags = []
+    for tag in tags:
+        dbTag = db.session.query(Tag).filter(Tag.name==tag).scalar()
+        if not dbTag:
+            dbTag = Tag(name=tag)
+        saved_tags.append(dbTag)
+
+    meme = Meme(url=path,tags=saved_tags, user_id=current_user.id)
     db.session.add(meme)
     db.session.commit()
     flash('Meme Succefully Uploaded!', category='success')
@@ -113,8 +122,9 @@ def search():
 def search(tags, page_num):
     multi_memes = []
     for tag in tags.split():
-        memes = Meme.query.filter(Meme.tags.contains(tag)).paginate(page=page_num,per_page=50).items
-        multi_memes.append(memes)
+        dbTag = db.session.query(Tag).filter(Tag.name == tag).scalar()
+        if dbTag:
+            multi_memes.append(dbTag.memes)
     return combine_memes(multi_memes)   
 
 def combine_memes(memeslist):

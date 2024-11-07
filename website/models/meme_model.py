@@ -1,23 +1,20 @@
+from flask_login import current_user
 import json
 
 from ..database.meme_model import Meme
+from .tag_model import convert_to_tagtype
 
 class MemeType():
-    def __init__(self, meme):
+    def __init__(self, meme: Meme):
         '''Takes a meme from the database and converts it into
         a MemeType object.'''
         self.id = meme.id
         self.url = meme.url
-        tags = []
-        for tag in meme.tags.split():
-            tags.append(tag)
-        self.tags = tags
-        self.liked = []
-        if meme.liked != '':
-            self.liked = json.loads(meme.liked)
-        self.likes = len(self.liked)
+        self.tags = convert_to_tagtype(meme.tags)
+        self.liked = current_user.id in meme.users_liked
+        self.likes = len(meme.users_liked)
         self.user_id = meme.user_id
-        self.username = meme.username
+        self.username = meme.uploader.username
         self.date = meme.date.isoformat()
 
     @staticmethod

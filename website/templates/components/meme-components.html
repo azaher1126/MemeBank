@@ -7,10 +7,10 @@
         <img class="rounded" style="margin-top: -16px;" src="{{meme.url}}" width="300px" height="300px">
     </a>
     <p id="tags" style="float: left;">
-        Tags: {% for tag in meme.tags %} {{tag}} {% endfor %}
+        Tags: {% for tag in meme.tags %} {{tag.name}} {% endfor %}
     </p>
     <div style="float: right;">
-        {% if current_user.id in meme.liked %}
+        {% if meme.liked %}
         <a id='like_button{{meme.id}}' href="javascript:unlike({{meme.id}})" style="float:left;">
             <span id='heart{{meme.id}}' class="fas fa-heart" aria-hidden="true"></span>
         </a>

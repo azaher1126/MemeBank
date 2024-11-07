@@ -12,7 +12,7 @@
     Search Results For: {{res['search']}}</h3>
     <div class="meme-container">
     {% for meme in res['memes'] %}
-        {{ meme_comps.meme_preview(meme, current_user) }}
+        {{ meme_comps.meme_preview(meme) }}
     {% endfor %}
 </div>
 {% endblock %}

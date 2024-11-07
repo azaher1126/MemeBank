@@ -13,7 +13,7 @@
     <h3 {% if user.username == 'azaher1126' %} style="color: gold;" {% endif %}>{{user.username}}</h3>
     <div class="meme-container">
         {% for meme in user.memes %}
-            {{ meme_comps.meme_preview(meme, current_user) }}
+            {{ meme_comps.meme_preview(meme) }}
         {% endfor %}
     </div>
 </div>

@@ -1,4 +1,5 @@
 from . import db
+from .liked_entry import like_entries
 from flask_login import UserMixin
 
 class User(db.Model, UserMixin):
@@ -9,5 +10,7 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(150), unique=True)
     first_name = db.Column(db.String(150))
     last_name = db.Column(db.String(150))
-    memes = db.relationship('Meme')
+    memes = db.relationship('Meme', back_populates='uploader', cascade="all, delete-orphan")
     default_sorting = db.Column(db.Integer)
+
+    liked_memes = db.relationship('Meme', secondary=like_entries, back_populates='users_liked')
