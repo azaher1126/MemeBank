@@ -1,41 +1,33 @@
 {% extends 'base.html' %}
 
 {% block title %}Login{% endblock %}
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/account-style.css') }}">
+{% endblock %}
 
 {% block body %}
-<div style="padding-top: 8px;">
-  <div class="container">
-    <div id="login-row" class="row justify-content-center align-items-center">
-      <div id="login-column" class="col-md-6">
-        <div id="login-box" class="col-md-12">
-          <form method="POST" class="form">
-            <h3 style="text-align: center;">Login</h3>
-            <div class="form-group">
-              <label for="email">Email Address/Username</label>
-              <input type="text" class="form-control" id="email" name="email" placeholder="Enter email" />
-            </div>
-            <div class="form-group">
-              <label for="password">Password</label>
-              <input type="password" class="form-control" id="password" name="password" placeholder="Enter password" />
-            </div>
-            <div class="form-group">
-              <label for="remember-me" style="padding-right: 8px;"><span>
-                  <input id="remember-me" name="remember-me" type="checkbox"></span>
-                <span>Remember Me</span></label><br>
-              <div class="text-center">
-                <button type="submit" class="btn btn-primary">Login</button>
-              </div>
-              <div style="padding-top: 16px;" id="forget-password" class="text-center">
-                <a style="color: blue;" href="/forget_password">Forget your password?</a>
-              </div>
-              <div  id="register-link" class="text-center">
-                <p>Don't have an account? <a style="color: blue;" href="/register">Register</a></p>
-              </div>
-            </div>
-          </form>
-        </div>
+<div class="d-flex flex-column align-items-center w-100">
+  <h3>Login</h3>
+  <form method="POST" class="form account-form">
+    <div class="form-group">
+      <label for="email">Email Address/Username</label>
+      <input type="email" class="form-control" id="email" name="email" placeholder="Enter email" />
+    </div>
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input type="password" class="form-control" id="password" name="password" placeholder="Enter password" />
+    </div>
+    <div class="form-group">
+      <label for="remember-me" style="padding-right: 8px;"><span>
+          <input id="remember-me" name="remember-me" type="checkbox"></span>
+        <span>Remember Me</span></label><br>
+      <div class="text-center">
+        <button type="submit" class="btn btn-primary">Login</button>
       </div>
     </div>
-  </div>
+  </form>
+    <a style="color: blue;" href="/forget_password">Forget your password?</a>
+    <p>Don't have an account? <a style="color: blue;" href="/register">Register</a></p>
 </div>
 {% endblock %}

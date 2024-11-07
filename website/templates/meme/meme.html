@@ -22,7 +22,7 @@
 {% endblock %}
 
 {% block body %}
-<div class="meme-detailed mt-2">
+<div class="meme-detailed">
   <a href="/profile/{{meme.username}}" {% if meme.username == 'azaher1126' %} style="color: gold;" {% endif %}>{{meme.username}}</a>
   <img class="rounded mw-100" src="../{{meme.url}}">
   <div class="meme-description">

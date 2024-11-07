@@ -8,20 +8,21 @@
 {% endblock %}
 
 {% block body %}
-<h3 style="margin-top: 16px; margin-left: 24px;">
-    Search Results For: {{res['search']}}</h3>
-    <div id="memes" class="meme-container">
+<h3 class="m-0">Search Results For: {{res['search']}}</h3>
+<div id="memes" class="meme-container">
     {% for meme in res['memes'] %}
         {{ meme_comps.meme_preview(meme) }}
     {% endfor %}
 </div>
+{% endblock %}
+{% block scripts %}
 <script src="{{ url_for('static', filename='js/meme-script.js') }}"></script>
 <script>
     window.last_meme_id = '{{ res["memes"][-1].id }}';
-    document.addEventListener('scroll', function () {
+    document.getElementById('memes').addEventListener('scroll', function () {
       load_new_page();
     }, {
       passive: true
     });
   </script>
-{% endblock %}
+  {% endblock %}

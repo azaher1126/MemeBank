@@ -6,77 +6,24 @@
 {% block head %}
 {{ super() }}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/meme-style.css') }}">
-<style>
-  .link-button {
-    background: none;
-    border: none;
-    color: white;
-    cursor: pointer;
-    font-size: 1em;
-    font-family: Roboto;
-    padding: 6px;
-}
-.link-button:hover {
-  color: white;
-  text-decoration: none;
-}
-.cursed {
-  color: blue;
-}
-.link-button:focus {
-    outline: none;
-}
-</style>
 {% endblock %}
 
 {% block body %}
 <!-- Page content -->
-<div class="container-fluid">
-  <div class="row justify-content-start">
-    <div class="col-2">
-      <!--First Col-->
-      <div class="bg-dark rounded" style="margin-top: 16px;">
-        <h4 style="margin-left: 16px; padding-top: 8px;">Popular Tags</h4>
-        <ul class="nav nav-pills flex-column mb-auto" style="margin-left: 24px; padding-bottom: 8px;">
-          <li class="nav-item">
-            <a href="/search?search=gif" class="link-button">gif</a>
-          </li>
-          <li class="nav-item">
-            <a href="/search?search=funny" class="link-button">funny</a>
-          </li>
-          <li class="nav-item">
-            <a href="/search?search=facebook" class="link-button">facebook</a>
-          </li>
-          <li class="nav-item">
-            <a href="/search?search=cursed" class="link-button cursed">cursed</a>
-          </li>
-          <li class="nav-item">
-            <a href="/search?search=deepFRIED" class="link-button">deepFRIED</a>
-          </li>
-          <li class="nav-item">
-            <a href="/search?search=NSFW" class="link-button">NSFW</a>
-          </li>
-          <li class="nav-item">
-            <a href="/search?search=coding" class="link-button">coding</a>
-          </li>
-        </ul>
-      </div>
-    </div>
-    <div class="col">
-      <div id="memes" class="meme-container">
-        {% for meme in memes %}
-          {{ meme_comps.meme_preview(meme) }}
-        {% endfor %}
-      </div>
-    </div>
+  <div id="memes" class="meme-container">
+    {% for meme in memes %}
+      {{ meme_comps.meme_preview(meme) }}
+    {% endfor %}
   </div>
+{% endblock %}
+{% block scripts %}
   <script src="{{ url_for('static', filename='js/meme-script.js') }}"></script>
   <script>
     window.last_meme_id = '{{ memes[-1].id }}';
-    document.addEventListener('scroll', function () {
+    document.getElementById('memes').addEventListener('scroll', function () {
       load_new_page();
     }, {
       passive: true
     });
   </script>
-  {% endblock %}
+{% endblock %}
