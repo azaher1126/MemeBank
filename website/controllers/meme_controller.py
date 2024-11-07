@@ -1,4 +1,4 @@
-from sqlalchemy import desc
+from sqlalchemy import desc, and_
 from flask import Blueprint, render_template, request, redirect, flash, abort, jsonify
 from flask_login import login_required, current_user
 from flask.helpers import url_for
@@ -121,17 +121,30 @@ def search():
     if not tags or tags == '':
         flash('Invaild Search!', category='error')
         return redirect(url_for('public.home'))
-    combined_memes = search(tags,1)
+    last_id = request.args.get('last_id')
+    
+    combined_memes = search(tags, last_id)
     memesT = convert_to_memetype(combined_memes)
-    result = {'search': tags, 'memes': memesT}
-    return render_template('meme/search.html', res=result)
+    if not last_id:
+        result = {'search': tags, 'memes': memesT}
+        return render_template('meme/search.html', res=result)
+    return render_template('components/meme_page.html', memes=memesT)
 
-def search(tags, page_num):
+def search(tags, last_id: int | None):
     multi_memes = []
     for tag in tags.split():
         dbTag = db.session.query(Tag).filter(Tag.name == tag).scalar()
-        if dbTag:
-            multi_memes.append(dbTag.memes)
+        if not dbTag:
+            continue
+        if not last_id:
+            memes = db.session.query(Meme).order_by(desc(Meme.date)).filter(Meme.tags.contains(dbTag)).limit(20).all()
+            multi_memes.append(memes)
+        else:
+            last_meme = db.session.query(Meme).filter(Meme.id == last_id).first()
+            if not last_meme:
+                continue
+            memes = db.session.query(Meme).order_by(desc(Meme.date)).filter(and_(Meme.id < last_meme.id, Meme.tags.contains(dbTag))).limit(20).all()
+            multi_memes.append(memes)
     return combine_memes(multi_memes)   
 
 def combine_memes(memeslist):
@@ -142,10 +155,13 @@ def combine_memes(memeslist):
         if len(memes) > maxlength:
             maxlength = len(memes)
     results = []
+    result_ids = []
     for i in range(maxlength):
         for memes in memeslist:
             if i < len(memes):
-                results.append(memes[i])
+                if memes[i].id not in result_ids:
+                    result_ids.append(memes[i].id)
+                    results.append(memes[i])
     return sort_combined_memes(results)
 
 def sort_combined_memes(memes):

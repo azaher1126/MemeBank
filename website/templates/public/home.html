@@ -30,48 +30,6 @@
 {% endblock %}
 
 {% block body %}
-<script>
-  page_num = 1;
-  function isInViewport(element) {
-    const rect = element.getBoundingClientRect();
-    return (
-      rect.top >= 0 &&
-      rect.left >= 0 &&
-      rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-      rect.right <= (window.innerWidth || document.documentElement.clientWidth)
-    );
-  }
-  function load_new_page() {
-    img = document.getElementById('like_button' + str(40 + 50 * page_num - 1));
-    if (isInViewport(img) == true) {
-      page_num += 1;
-      var xmlHttp = new XMLHttpRequest();
-      xmlHttp.open("GET", `/getpage?num=${page_num}`);
-      xmlHttp.send(null);
-      memes = JSON.parse(xmlHttp.responseText)
-      body = document.getElementById('memes');
-      for (meme in memes) {
-        body.innerHTML += '<div class="meme"><div><a href="/profile/' + meme.username + '"><p>' + meme.username + '</p></a><a href="/meme/' + meme.id + '" style="text-decoration: none"><img class="rounded" style="margin-top: -16px;" src="' + meme.url + '" width="300px" height="300px"></a><p id="tags" style="float: left;">Tags: ';
-        for (tag in meme.tags) {
-          body.innerHTML += tag + ' ';
-        }
-        body.innerHTML += '</p><div style="float: right;">'
-        if ({{ current_user.id}} in meme.liked) {
-        body.innerHTML += '<a id="like_button' + meme.id + '" href="javascript:unlike(' + meme.id + ')" style="float:left;"><span id="heart' + meme.id + '" class="fas fa-heart" aria-hidden="true"></span></a>';
-      } else {
-        body.innerHTML += '<a id="like_button' + meme.id + '" href="javascript:like(' + meme.id + ')" style="float:left;"><span id="heart' + meme.id + '" class="far fa-heart" aria-hidden="true"></span></a>';
-      }
-      body.innerHTML += '<p id="like_count' + meme.id + '" style="float: left;">' + meme.likes + '</p></div></div></div>';
-    }
-  }
-  }
-
-  document.addEventListener('scroll', function () {
-    load_new_page()
-  }, {
-    passive: true
-  });
-</script>
 <!-- Page content -->
 <div class="container-fluid">
   <div class="row justify-content-start">
@@ -104,11 +62,21 @@
         </ul>
       </div>
     </div>
-    <div id='memes' class="col meme-container">
-      {% for meme in memes %}
-        {{ meme_comps.meme_preview(meme) }}
-      {% endfor %}
+    <div class="col">
+      <div id="memes" class="meme-container">
+        {% for meme in memes %}
+          {{ meme_comps.meme_preview(meme) }}
+        {% endfor %}
+      </div>
     </div>
   </div>
-<script src="{{ url_for('static', filename='js/meme-script.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/meme-script.js') }}"></script>
+  <script>
+    window.last_meme_id = '{{ memes[-1].id }}';
+    document.addEventListener('scroll', function () {
+      load_new_page();
+    }, {
+      passive: true
+    });
+  </script>
   {% endblock %}

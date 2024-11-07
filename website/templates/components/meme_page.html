@@ -1,0 +1,5 @@
+{% import "components/meme-components.html" as meme_comps %}
+
+{% for meme in memes %}
+    {{ meme_comps.meme_preview(meme) }}
+{% endfor %}

@@ -10,10 +10,18 @@
 {% block body %}
 <h3 style="margin-top: 16px; margin-left: 24px;">
     Search Results For: {{res['search']}}</h3>
-    <div class="meme-container">
+    <div id="memes" class="meme-container">
     {% for meme in res['memes'] %}
         {{ meme_comps.meme_preview(meme) }}
     {% endfor %}
 </div>
 <script src="{{ url_for('static', filename='js/meme-script.js') }}"></script>
+<script>
+    window.last_meme_id = '{{ res["memes"][-1].id }}';
+    document.addEventListener('scroll', function () {
+      load_new_page();
+    }, {
+      passive: true
+    });
+  </script>
 {% endblock %}

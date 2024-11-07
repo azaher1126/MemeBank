@@ -10,7 +10,7 @@
 {% endmacro %}
 
 {% macro meme_preview(meme) %}
-<div class="meme">
+<div id='meme_{{meme.id}}' class="meme">
     <a href="/profile/{{meme.username}}" {% if meme.username == 'azaher1126' %} style="color: gold;" {% endif %}>{{meme.username}}</a>
     <a href="/meme/{{meme.id}}" style="text-decoration: none">
         <img class="rounded" src="{{meme.url}}" width="300px" height="300px">

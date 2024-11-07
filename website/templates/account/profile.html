@@ -11,11 +11,19 @@
 <div style="margin: auto; margin-top: 8px; text-align: center;">
     
     <h3 {% if user.username == 'azaher1126' %} style="color: gold;" {% endif %}>{{user.username}}</h3>
-    <div class="meme-container">
+    <div id="memes" class="meme-container">
         {% for meme in user.memes %}
             {{ meme_comps.meme_preview(meme) }}
         {% endfor %}
     </div>
 </div>
 <script src="{{ url_for('static', filename='js/meme-script.js') }}"></script>
+<script>
+    window.last_meme_id = '{{ user.memes[-1].id }}';
+    document.addEventListener('scroll', function () {
+      load_new_page();
+    }, {
+      passive: true
+    });
+  </script>
 {% endblock %}

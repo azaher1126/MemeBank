@@ -1,4 +1,4 @@
-from sqlalchemy import or_
+from sqlalchemy import or_, and_, desc
 from flask import Blueprint, render_template, request, redirect, flash, abort
 from flask_login import login_user, login_required, logout_user
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -7,6 +7,7 @@ from ..database.user_model import User
 from ..database.meme_model import Meme
 from ..database import db
 from ..models.user_model import UserType
+from ..models.meme_model import convert_to_memetype
 from .helpers.anonymous_only import anonymous_only
 
 account_blueprint = Blueprint('account', __name__)
@@ -90,9 +91,18 @@ def profile(username):
     user = db.session.query(User).filter(User.username==username).first()
     if not user:
         abort(404)
-    memes = db.session.query(Meme).filter(Meme.user_id==user.id).all()
-    userT = UserType(user, memes)
-    return render_template('account/profile.html',user=userT)
+    last_id = request.args.get('last_id')
+    if not last_id:
+        memes = db.session.query(Meme).filter(Meme.user_id==user.id).order_by(desc(Meme.date)).limit(20).all()
+        userT = UserType(user, memes)
+        return render_template('account/profile.html',user=userT)
+    # Page is requesting more memes
+    last_meme = db.session.query(Meme).filter(Meme.id == last_id).first()
+    if not last_meme:
+        abort(404)
+    memes = db.session.query(Meme).order_by(desc(Meme.date)).filter(and_(Meme.id < last_meme.id, Meme.user_id==user.id)).limit(20).all()
+    memesT = convert_to_memetype(memes)
+    return render_template('components/meme_page.html', memes=memesT)
 
 @account_blueprint.route('/settings')
 @login_required
