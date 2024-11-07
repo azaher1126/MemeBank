@@ -7,23 +7,8 @@ from ..database.tag_model import Tag
 from ..database import db
 from ..models.meme_model import MemeType, convert_to_memetype
 import os
-import json
 
 meme_blueprint = Blueprint('meme',__name__)
-
-@meme_blueprint.route('/getpage')
-def get_page():
-    num = int(request.args.get('num',0))
-    if num == 0:
-        abort(404)
-    tags = request.args.get('search', None)
-    memes = Meme.query.order_by(desc(Meme.date)).paginate(page=int(num),per_page=50,error_out=False).items
-    if search != None:
-        memes = search(tags,num)
-    if len(memes) == 0:
-        return ''
-    memesT = convert_to_memetype(memes)
-    return json.dumps([MemeType.toJSON(self=meme) for meme in memesT])
 
 @meme_blueprint.route('/upload')
 @login_required
