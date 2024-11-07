@@ -1,54 +1,50 @@
 function like(id) {
-    var http = new XMLHttpRequest();
-    var url = '/like';
-    var params = 'id=' + id;
-    http.open('POST', url, true);
+    const requestData = new FormData();
+    requestData.append('id', id);
 
-    var redirected = undefined;
-    //Send the proper header information along with the request
-    http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-    http.onreadystatechange = function () {//Call a function when the state changes.
-        if (http.readyState == XMLHttpRequest.HEADERS_RECEIVED) {
-            redirected = http.responseURL;
+    fetch('/like', {
+        method: 'POST',
+        body: requestData,
+    }).then((response) => {
+        if (response.status === 401) {
+            window.location.href = '/login?next=' + window.location.pathname + window.location.search;
+        } else if (response.status != 200) {
+            window.location.reload();
+        } else {
+            return response.json()
         }
-        else if (!redirected && http.readyState == 4 && http.status == 200) {
-            const response = JSON.parse(http.responseText)
-          document.getElementById('like_count'+id).innerHTML = response['likes'];
-          const heartElem = document.getElementById('heart'+id);
-          if (response['liked'] && heartElem.classList.contains('far')) {
+    }).then((response) => {
+        document.getElementById('like_count' + id).innerHTML = response['likes'];
+        const heartElem = document.getElementById('heart' + id);
+        if (response['liked'] && heartElem.classList.contains('far')) {
             heartElem.classList.remove('far');
             heartElem.classList.add('fas');
-            document.getElementById('like_button'+id).setAttribute('onclick', 'unlike('+id+')');
-          }
-        } else {
-            window.history.pushState('','', redirected);
-            document.querySelector('html').innerHTML = http.responseText;
+            document.getElementById('like_button' + id).setAttribute('onclick', 'unlike(' + id + ')');
         }
-    }
-    http.send(params);
-  }
-  function unlike(id) {
-    var http = new XMLHttpRequest();
-    var url = '/unlike';
-    var params = 'id=' + id;
-    http.open('POST', url, true);
+    });
+}
+function unlike(id) {
+    const requestData = new FormData();
+    requestData.append('id', id);
 
-    //Send the proper header information along with the request
-    http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-    http.onreadystatechange = function () {//Call a function when the state changes.
-      if (http.readyState == 4 && http.status == 200) {
-        const response = JSON.parse(http.responseText)
-        document.getElementById('like_count'+id).innerHTML = response['likes'];
-        const heartElem = document.getElementById('heart'+id);
+    fetch('/unlike', {
+        method: 'POST',
+        body: requestData,
+    }).then((response) => {
+        if (response.status === 401) {
+            window.location.href = '/login?next=' + window.location.pathname + window.location.search;
+        } else if (response.status != 200) {
+            window.location.reload();
+        } else {
+            return response.json()
+        }
+    }).then((response) => {
+        document.getElementById('like_count' + id).innerHTML = response['likes'];
+        const heartElem = document.getElementById('heart' + id);
         if (!response['liked'] && heartElem.classList.contains('fas')) {
             heartElem.classList.remove('fas');
             heartElem.classList.add('far');
-            document.getElementById('like_button'+id).setAttribute('onclick', 'like('+id+')');
-          }
-        } else if (http.responseText == 'Login') {
-            document.innerHTML = http.responseText;
-            return;
+            document.getElementById('like_button' + id).setAttribute('onclick', 'like(' + id + ')');
         }
-    }
-    http.send(params);
-  }
+    });
+}

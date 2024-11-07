@@ -1,5 +1,5 @@
 from sqlalchemy import desc
-from flask import Blueprint, render_template, request, redirect, flash, abort
+from flask import Blueprint, render_template, request, redirect, flash, abort, jsonify
 from flask_login import login_required, current_user
 from flask.helpers import url_for
 from ..database.meme_model import Meme
@@ -75,32 +75,40 @@ def view_meme(id):
     return render_template('meme/meme.html',meme=memeT)
 
 @meme_blueprint.route('/like', methods=['POST'])
-@login_required
 def like():
+    if not current_user.is_authenticated:
+        flash('Please log in to start liking memes!', 'error')
+        abort(401)
     meme_id = request.form.get('id')
     if not meme_id:
+        flash('There was an error while processing your request, please try again.', 'error')
         abort(400)
     meme = Meme.query.filter_by(id=meme_id).first()
     if not meme:
+        flash('Unable to locate meme, it may have been deleted.', 'error')
         abort(404)
     if current_user not in meme.users_liked:
         meme.users_liked.append(current_user)
         db.session.commit()
-    return MemeType(meme).toJSON()
+    return jsonify(MemeType(meme))
 
 @meme_blueprint.route('/unlike', methods=['POST'])
-@login_required
 def unlike():
+    if not current_user.is_authenticated:
+        flash('Please log in to start unliking memes!', 'error')
+        abort(401)
     meme_id = request.form.get('id')
     if not meme_id:
+        flash('There was an error while processing your request, please try again.', 'error')
         abort(400)
     meme = Meme.query.filter_by(id=meme_id).first()
     if not meme:
+        flash('Unable to locate meme, it may have been deleted.', 'error')
         abort(404)
     if current_user in meme.users_liked:
         meme.users_liked.remove(current_user)
         db.session.commit()
-    return MemeType(meme).toJSON()
+    return jsonify(MemeType(meme))
 
 @meme_blueprint.route('/search', methods=['GET'])
 def search():

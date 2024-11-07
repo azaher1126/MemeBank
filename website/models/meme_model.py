@@ -1,10 +1,20 @@
+from dataclasses import dataclass
 from flask_login import current_user
-import json
 
 from ..database.meme_model import Meme
-from .tag_model import convert_to_tagtype
+from .tag_model import convert_to_tagtype, TagType
 
+@dataclass
 class MemeType():
+    id:int
+    url:str
+    tags: list[TagType]
+    liked: bool
+    likes: int
+    user_id: int
+    username: str
+    date: str
+
     def __init__(self, meme: Meme):
         '''Takes a meme from the database and converts it into
         a MemeType object.'''
@@ -16,10 +26,6 @@ class MemeType():
         self.user_id = meme.user_id
         self.username = meme.uploader.username
         self.date = meme.date.isoformat()
-
-    def toJSON(self):
-        return json.dumps(self, default=lambda o: o.__dict__, 
-            sort_keys=True, indent=4)
     
 def convert_to_memetype(memes: list[Meme]) -> list[MemeType]:
         '''Converts a list of memes from the database into a list of memes 
