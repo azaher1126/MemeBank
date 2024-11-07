@@ -11,12 +11,12 @@
     </p>
     <div style="float: right;">
         {% if meme.liked %}
-        <a id='like_button{{meme.id}}' href="javascript:unlike({{meme.id}})" style="float:left;">
+        <button class="like-button" id='like_button{{meme.id}}' onclick="unlike('{{meme.id}}')" style="float:left;">
             <span id='heart{{meme.id}}' class="fas fa-heart" aria-hidden="true"></span>
-        </a>
+        </button>
         {% else %}
-        <a id='like_button{{meme.id}}' href="javascript:like({{meme.id}})" style="float:left;"><span
-                id='heart{{meme.id}}' class="far fa-heart" aria-hidden="true"></span></a>
+        <button class="like-button" id='like_button{{meme.id}}' onclick="like('{{ meme.id }}')" style="float:left;"><span
+                id='heart{{meme.id}}' class="far fa-heart" aria-hidden="true"></span></button>
         {% endif %}
         <p id='like_count{{meme.id}}' style="float: left;">{{meme.likes}}</p>
     </div>

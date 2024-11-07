@@ -16,59 +16,6 @@
 </head>
 
 <body>
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        function like(id) {
-          var http = new XMLHttpRequest();
-          var url = '/like';
-          var params = 'id=' + id;
-          http.open('POST', url, true);
-      
-          //Send the proper header information along with the request
-          http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-          http.onreadystatechange = function () {//Call a function when the state changes.
-            if (http.readyState == 4 && http.status == 200) {
-              if (http.responseText == 'Success') {
-                old_count = parseInt(document.getElementById('like_count'+id).innerHTML);
-                like_count = old_count += 1;
-                document.getElementById('like_button'+id).href = 'javascript:unlike('+id+')';
-                document.getElementById('like_count'+id).innerHTML = like_count;
-                document.getElementById('heart'+id).classList.remove('far');
-                document.getElementById('heart'+id).classList.add('fas');
-              } else if (http.responseText == 'Login') {
-                window.location.href = '/login';
-              }
-            }
-          }
-          http.send(params);
-        }
-        function unlike(id) {
-          var http = new XMLHttpRequest();
-          var url = '/unlike';
-          var params = 'id=' + id;
-          http.open('POST', url, true);
-      
-          //Send the proper header information along with the request
-          http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-          http.onreadystatechange = function () {//Call a function when the state changes.
-            if (http.readyState == 4 && http.status == 200) {
-              if (http.responseText == 'Success') {
-                old_count = parseInt(document.getElementById('like_count'+id).innerHTML);
-                like_count = old_count -= 1;
-                document.getElementById('like_button'+id).href = 'javascript:like('+id+')';
-                document.getElementById('like_count'+id).innerHTML = like_count;
-                document.getElementById('heart'+id).classList.remove('fas');
-                document.getElementById('heart'+id).classList.add('far');
-              } else if (http.responseText == 'Login') {
-                window.location.href = '/login';
-              }
-            }
-          }
-          http.send(params);
-        }
-      </script>
     <!-- navbar start -->
     <nav class="navbar navbar-expand-md navbar-dark bg-dark">
         <a href="/" class="navbar-brand">memebank</a>
@@ -143,6 +90,9 @@
     {% endif %} {% endfor %} {% endif %} {% endwith %}
     <!--Messages End-->
     {% block body %}{% endblock %}
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

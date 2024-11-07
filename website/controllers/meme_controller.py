@@ -5,7 +5,7 @@ from flask.helpers import url_for
 from ..database.meme_model import Meme
 from ..database.tag_model import Tag
 from ..database import db
-from ..models.meme_model import MemeType
+from ..models.meme_model import MemeType, convert_to_memetype
 import os
 import json
 
@@ -22,7 +22,7 @@ def get_page():
         memes = search(tags,num)
     if len(memes) == 0:
         return ''
-    memesT = MemeType.convert_to_memetype(memes)
+    memesT = convert_to_memetype(memes)
     return json.dumps([MemeType.toJSON(self=meme) for meme in memesT])
 
 @meme_blueprint.route('/upload')
@@ -75,33 +75,32 @@ def view_meme(id):
     return render_template('meme/meme.html',meme=memeT)
 
 @meme_blueprint.route('/like', methods=['POST'])
+@login_required
 def like():
-    if current_user.is_authenticated == True:
-        meme_id = request.form.get('id')
-        meme = Meme.query.filter_by(id=meme_id).first()
-        liked = []
-        if meme.liked != '':
-            liked = json.loads(meme.liked)
-        liked.append(current_user.id)
-        meme.liked = json.dumps(liked)
+    meme_id = request.form.get('id')
+    if not meme_id:
+        abort(400)
+    meme = Meme.query.filter_by(id=meme_id).first()
+    if not meme:
+        abort(404)
+    if current_user not in meme.users_liked:
+        meme.users_liked.append(current_user)
         db.session.commit()
-        return 'Success'
-    else:
-        return 'Login'
+    return MemeType(meme).toJSON()
 
 @meme_blueprint.route('/unlike', methods=['POST'])
+@login_required
 def unlike():
-    if current_user.is_authenticated == True:
-        meme_id = request.form.get('id')
-        meme = Meme.query.filter_by(id=meme_id).first()
-        liked = json.loads(meme.liked)
-        index = liked.index(current_user.id)
-        del liked[index]
-        meme.liked = json.dumps(liked)
+    meme_id = request.form.get('id')
+    if not meme_id:
+        abort(400)
+    meme = Meme.query.filter_by(id=meme_id).first()
+    if not meme:
+        abort(404)
+    if current_user in meme.users_liked:
+        meme.users_liked.remove(current_user)
         db.session.commit()
-        return 'Success'
-    else:
-        return 'Login'
+    return MemeType(meme).toJSON()
 
 @meme_blueprint.route('/search', methods=['GET'])
 def search():
@@ -115,7 +114,7 @@ def search():
         flash('Invaild Search!', category='error')
         return redirect(url_for('public.home'))
     combined_memes = search(tags,1)
-    memesT = MemeType.convert_to_memetype(combined_memes)
+    memesT = convert_to_memetype(combined_memes)
     result = {'search': tags, 'memes': memesT}
     return render_template('meme/search.html', res=result)
 

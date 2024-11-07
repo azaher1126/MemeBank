@@ -10,3 +10,9 @@
 .meme img {
     aspect-ratio: 1;
 }
+.like-button, .like-button:hover {
+    color: white;
+    text-decoration: none;
+    background: none;
+    border: none;
+}

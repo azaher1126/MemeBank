@@ -1,4 +1,4 @@
-from .meme_model import MemeType
+from .meme_model import convert_to_memetype
 
 class UserType():
 
@@ -8,4 +8,4 @@ class UserType():
         self.first_name = user.first_name
         self.last_name = user.last_name
         self.username = user.username
-        self.memes = MemeType.convert_to_memetype(user.memes)
+        self.memes = convert_to_memetype(user.memes)
