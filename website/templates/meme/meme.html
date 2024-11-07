@@ -42,5 +42,7 @@
   </div>
   <a href="../{{meme.url}}" download="meme{{meme.id}}" class="btn btn-primary">Download</a>
 </div>
-
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/meme-script.js') }}"></script>
 {% endblock %}
