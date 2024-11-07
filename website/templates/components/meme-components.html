@@ -4,7 +4,7 @@
         <p {% if meme.username == 'azaher1126' %} style="color: gold;" {% endif %}>{{meme.username}}</p>
     </a>
     <a href="/meme/{{meme.id}}" style="text-decoration: none">
-        <img class="rounded" style="margin-top: -16px;" src="{{meme.url}}" width="300px" height="300px">
+        <img class="rounded" src="{{meme.url}}" width="300px" height="300px">
     </a>
     <p id="tags" style="float: left;">
         Tags: {% for tag in meme.tags %} {{tag.name}} {% endfor %}

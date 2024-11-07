@@ -6,10 +6,12 @@ from flask.helpers import url_for
 from ..database.user_model import User
 from ..database import db
 from ..models.user_model import UserType
+from .helpers.anonymous_only import anonymous_only
 
 account_blueprint = Blueprint('account', __name__)
 
 @account_blueprint.route('/register', methods=['GET', 'POST'])
+@anonymous_only
 def register():
     if request.method == 'POST':
         email = request.form.get('email')
@@ -43,11 +45,14 @@ def register():
             db.session.commit()
             login_user(new_user)
             flash('Account created!', category='success')
-            return redirect(url_for('public.home'))
+
+            next_url = request.args.get('next')
+            return redirect(next_url or url_for('public.home'))
 
     return render_template("account/register.html")
 
 @account_blueprint.route('/login', methods=['GET', 'POST'])
+@anonymous_only
 def login():
     if request.method == 'POST':
         email = request.form.get('email')
@@ -58,7 +63,8 @@ def login():
             if check_password_hash(user.password, password):
                 flash('Logged in successfully!', category='success')
                 login_user(user, remember=rememeber_me)
-                return redirect(url_for('public.home'))
+                next_url = request.args.get('next')
+                return redirect(next_url or url_for('public.home'))
             else:
                 flash('Incorrect password, try again.', category='error')
         else:
@@ -70,9 +76,11 @@ def login():
 def logout():
     logout_user()
     flash("Successfully logged out.", 'success')
-    return redirect(url_for('public.home'))
+    next_url = request.args.get('next')
+    return redirect(next_url or url_for('public.home'))
 
 @account_blueprint.route('/forget_password')
+@anonymous_only
 def forget_password():
     return render_template('account/forget_password.html')
 

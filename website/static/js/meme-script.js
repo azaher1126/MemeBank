@@ -2,7 +2,7 @@ function like(id) {
     const requestData = new FormData();
     requestData.append('id', id);
 
-    fetch('/like', {
+    fetch('/api/like', {
         method: 'POST',
         body: requestData,
     }).then((response) => {
@@ -27,7 +27,7 @@ function unlike(id) {
     const requestData = new FormData();
     requestData.append('id', id);
 
-    fetch('/unlike', {
+    fetch('/api/unlike', {
         method: 'POST',
         body: requestData,
     }).then((response) => {

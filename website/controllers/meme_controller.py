@@ -74,7 +74,7 @@ def view_meme(id):
     memeT = MemeType(meme)
     return render_template('meme/meme.html',meme=memeT)
 
-@meme_blueprint.route('/like', methods=['POST'])
+@meme_blueprint.route('/api/like', methods=['POST'])
 def like():
     if not current_user.is_authenticated:
         flash('Please log in to start liking memes!', 'error')
@@ -92,7 +92,7 @@ def like():
         db.session.commit()
     return jsonify(MemeType(meme))
 
-@meme_blueprint.route('/unlike', methods=['POST'])
+@meme_blueprint.route('/api/unlike', methods=['POST'])
 def unlike():
     if not current_user.is_authenticated:
         flash('Please log in to start unliking memes!', 'error')
