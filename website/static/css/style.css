@@ -3,3 +3,6 @@ body {
     color: white;
     font-family: Roboto, sans-serif;
 }
+a:hover {
+    text-decoration: none!important;
+}

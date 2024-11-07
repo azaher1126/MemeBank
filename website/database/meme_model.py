@@ -12,5 +12,5 @@ class Meme(db.Model):
 
     tags = db.relationship('Tag', secondary=tag_entries, back_populates='memes')
 
-    uploader = db.relationship('User', back_populates='memes')
+    uploader = db.relationship('User', back_populates='memes', foreign_keys=[user_id])
     users_liked = db.relationship('User', secondary=like_entries, back_populates='liked_memes')
