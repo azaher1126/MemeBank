@@ -73,6 +73,8 @@ function load_new_page() {
         url += '?last_id=' + window.last_meme_id;
     }
 
+    window.last_meme_id = undefined;
+
     fetch(url).then((response) => {
         if (!response.ok) {
             last_meme_id = undefined;
