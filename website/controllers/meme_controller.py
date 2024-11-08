@@ -7,6 +7,7 @@ from ..database.tag_model import Tag
 from ..database import db
 from ..models.meme_model import MemeType, convert_to_memetype
 from ..forms.meme_upload_form import MemeUploadForm
+from ..forms import flash_errors
 from ..uploads.meme_uploads import meme_uploads
 import os
 
@@ -40,6 +41,8 @@ def upload_file():
         db.session.commit()
         flash('Meme Succefully Uploaded!', category='success')
         return redirect(url_for('public.home'))
+    else:
+        flash_errors(upload_form)
     return render_template('meme/upload.html', upload_form=upload_form)
 
 @meme_blueprint.route('/meme/image/<path:id>')
