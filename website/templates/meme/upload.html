@@ -4,17 +4,10 @@
 {% block head %}
 {{ super() }}
 <style>
-  #upload {
-    opacity: 0;
+  .upload-form {
+    max-width: 400px;
+    text-align: center;
   }
-
-  #upload-label {
-    position: absolute;
-    top: 50%;
-    left: 1rem;
-    transform: translateY(-50%);
-  }
-
   .image-area {
     border: 2px dashed rgba(255, 255, 255, 0.7);
     padding: 1rem;
@@ -54,46 +47,24 @@
       reader.readAsDataURL(input.files[0]);
     }
   }
-
-  $(function () {
-    $('#upload').on('change', function () {
-      readURL(input);
-    });
-  });
-
-  /*  ==========================================
-      SHOW UPLOADED IMAGE NAME
-  * ========================================== */
-  var input = document.getElementById('upload');
-  var infoArea = document.getElementById('upload-label');
-
-  input.addEventListener('change', showFileName);
-  function showFileName(event) {
-    var input = event.srcElement;
-    var fileName = input.files[0].name;
-    infoArea.textContent = 'File name: ' + fileName;
-  }
 </script>
-  <div style="text-align: center; width: 300px; margin-top:8px; margin-left: 8px;">
+  <div class="d-flex flex-column w-100 align-items-center">
     <h2>Meme Upload</h1>
-      <form method="POST" action="" enctype="multipart/form-data" style="margin-top: 8px;">
-        <div class="input-group mb-3 px-2 py-2 rounded-pill bg-white shadow-sm">
-          <input id="upload" type="file" name="file" accept="image/*" onchange="readURL(this);"
-            class="form-control border-0">
-          <label id="upload-label" for="upload" class="font-weight-light text-muted">Choose file</label>
+      <form class="upload-form" method="POST" action="" enctype="multipart/form-data">
+        {{ upload_form.csrf_token }}
+        <div class="input-group px-2 py-2 rounded-pill bg-white shadow-sm">
           <div class="input-group-append">
-            <label for="upload" class="btn btn-light m-0 rounded-pill px-4"> <i
-                class="fa fa-cloud-upload mr-2 text-muted"></i><small
-                class="text-uppercase font-weight-bold text-muted">Choose file</small></label>
+            {{ upload_form.meme(id="file", class="form-control border-0", onchange="readURL(this);") }}
           </div>
         </div>
 
         <!-- Uploaded image area-->
-        <div style="margin-bottom: 16px;" class="image-area mt-4"><img id="imageResult" src="#" alt=""
+        <div class="image-area my-2"><img id="imageResult" src="#" alt=""
             class="img-fluid rounded shadow-sm mx-auto d-block"></div>
-        <p><input type="text" name="tags" placeholder="Tags"></p>
-        <p>Note: seperate tags with spaces.</p>
-        <p><input type="submit" value="Upload" class="btn btn-primary"></p>
+
+          {{ upload_form.tags(class="form-control", placeholder="Tags") }}
+        <p class="mb-1">Note: seperate tags with spaces.</p>
+        {{ upload_form.submit(class="btn btn-primary") }}
       </form>
   </div>
 {% endblock %}

@@ -1,55 +1,53 @@
 from sqlalchemy import desc, and_
-from flask import Blueprint, render_template, request, redirect, flash, abort, jsonify
+from flask import Blueprint, render_template, request, redirect, flash, abort, jsonify, send_from_directory
 from flask_login import login_required, current_user
 from flask.helpers import url_for
 from ..database.meme_model import Meme
 from ..database.tag_model import Tag
 from ..database import db
 from ..models.meme_model import MemeType, convert_to_memetype
+from ..forms.meme_upload_form import MemeUploadForm
+from ..uploads.meme_uploads import meme_uploads
 import os
 
 meme_blueprint = Blueprint('meme',__name__)
 
-@meme_blueprint.route('/upload')
-@login_required
-def upload():
-    '''Displays the upload page.'''
-    return render_template('meme/upload.html')
-
-@meme_blueprint.route('/upload',methods=['POST'])
+@meme_blueprint.route('/upload',methods=['GET','POST'])
 @login_required
 def upload_file():
     '''Uploads the image into its required folder and adds the url 
     for the image to the database and redirects back to homepage.'''
-    file = request.files['file']
-    tagtext = request.form.get('tags')
-    if file.filename == '' or tagtext == '':
-        flash('Didn\'t submit required infromation!', category='error')
-        return redirect(url_for('public.home'))
-    extention = os.path.splitext(file.filename)[1]
-    memes = Meme.query.all()
-    id = 0
-    if len(memes) == 0:
-        id = 1
-    else:
-        id = memes[-1].id+1
-    if os.getcwd() != 'Z:\memebank\website\\templates':
-        os.chdir('website/templates')
-    path = '../static/memes/meme'+str(id)+extention
-    file.save(path)
-    tags = tagtext.split()
-    saved_tags = []
-    for tag in tags:
-        dbTag = db.session.query(Tag).filter(Tag.name==tag).scalar()
-        if not dbTag:
-            dbTag = Tag(name=tag)
-        saved_tags.append(dbTag)
+    upload_form: MemeUploadForm = MemeUploadForm()
+    if upload_form.validate_on_submit():
+        meme_rec = Meme(user_id=current_user.id)
+        db.session.add(meme_rec)
 
-    meme = Meme(url=path,tags=saved_tags, user_id=current_user.id)
-    db.session.add(meme)
-    db.session.commit()
-    flash('Meme Succefully Uploaded!', category='success')
-    return redirect(url_for('public.home'))
+        tagtext = request.form.get('tags')
+        tags = tagtext.split()
+        for tag in tags:
+            dbTag = db.session.query(Tag).filter(Tag.name==tag).scalar()
+            if not dbTag:
+                dbTag = Tag(name=tag)
+            meme_rec.tags.append(dbTag)
+
+        file = upload_form.meme.data
+        extention = os.path.splitext(file.filename)[1]
+
+        filename = f'meme_{meme_rec.id}{extention}'
+        meme_uploads.save(file, name=filename)
+        meme_rec.url = filename
+
+        db.session.commit()
+        flash('Meme Succefully Uploaded!', category='success')
+        return redirect(url_for('public.home'))
+    return render_template('meme/upload.html', upload_form=upload_form)
+
+@meme_blueprint.route('/meme/image/<path:id>')
+def get_meme_image(id):
+    meme_rec = db.session.query(Meme).filter(Meme.id == id).first()
+    if not meme_rec:
+        abort(404)
+    return send_from_directory(meme_uploads.config.destination, meme_rec.url)
 
 @meme_blueprint.route('/meme/<path:id>')
 def view_meme(id):

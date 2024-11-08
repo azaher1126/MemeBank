@@ -19,7 +19,7 @@ class MemeType():
         '''Takes a meme from the database and converts it into
         a MemeType object.'''
         self.id = meme.id
-        self.url = meme.url
+        self.url = f'/meme/image/{meme.id}'
         self.tags = convert_to_tagtype(meme.tags)
         self.liked = current_user in meme.users_liked
         self.likes = len(meme.users_liked)
