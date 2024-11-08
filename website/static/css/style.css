@@ -31,6 +31,12 @@ a:hover {
 .sidebar ul {
     margin: 0 0 1rem 1.5rem;
 }
+.sidebar button {
+    background: none;
+    border: none;
+    cursor: default;
+    color: inherit;
+}
 .link-button {
     background: none;
     border: none;
@@ -54,6 +60,11 @@ a:hover {
 @media (max-width: 544px) {
     .content-container {
         flex-direction: column;
-        overflow-y: auto;
+    }
+    .sidebar button {
+        cursor: pointer;
+    }
+    .sidebar .hidden {
+        display: none;
     }
 }
