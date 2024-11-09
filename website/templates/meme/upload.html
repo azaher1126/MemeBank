@@ -35,19 +35,6 @@
 {% endblock %}
 
 {% block body %}
-<script>
-  function readURL(input) {
-    if (input.files && input.files[0]) {
-      var reader = new FileReader();
-
-      reader.onload = function (e) {
-        $('#imageResult')
-          .attr('src', e.target.result);
-      };
-      reader.readAsDataURL(input.files[0]);
-    }
-  }
-</script>
   <div class="d-flex flex-column w-100 align-items-center">
     <h2>Meme Upload</h1>
       <form class="upload-form" method="POST" action="" enctype="multipart/form-data">
@@ -63,8 +50,23 @@
             class="img-fluid rounded shadow-sm mx-auto d-block"></div>
 
           {{ upload_form.tags(class="form-control", placeholder="Tags") }}
-        <p class="mb-1">Note: seperate tags with spaces.</p>
+        <p class="mb-1">Note: separate tags with spaces.</p>
         {{ upload_form.submit(class="btn btn-primary") }}
       </form>
   </div>
+{% endblock %}
+{% block scripts %}
+<script>
+  function readURL(input) {
+    if (input.files && input.files[0]) {
+      var reader = new FileReader();
+
+      reader.onload = function (e) {
+        $('#imageResult')
+          .attr('src', e.target.result);
+      };
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+</script>
 {% endblock %}
