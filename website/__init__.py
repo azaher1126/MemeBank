@@ -1,21 +1,26 @@
 from flask import Flask
 from flask_login import LoginManager
 from os import path
+from dotenv import load_dotenv
 
 from .controllers import intialize_controllers
 from .database import initialize_database
 from .uploads import initialize_uploads
 from .forms import initialize_forms
 
+env_path = path.join(path.dirname(path.realpath(__file__)), path.pardir, '.env')
+load_dotenv(env_path)
+from .config import Config
+
 DB_PATH = path.join(path.dirname(path.realpath(__file__)), 'database.db')
 
-def create_app():
+def create_app(config: Config):
     '''Creats the server instance and sets up all views and databses.'''
     app = Flask(__name__)
-    app.config['SECRET_KEY'] = 'memebank'
+    app.config.from_object(config)
     app.config['MAX_CONTENT_LENGTH'] = 25165824
 
-    initialize_database(app, DB_PATH)
+    initialize_database(app, config.DB_PATH or DB_PATH)
 
     intialize_controllers(app)
 

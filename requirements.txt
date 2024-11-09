@@ -6,3 +6,4 @@ Flask-Migrate
 Flask-WTF
 Flask-Reuploaded
 email_validator
+python-dotenv
