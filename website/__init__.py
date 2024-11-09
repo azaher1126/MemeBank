@@ -5,6 +5,7 @@ from os import path
 from .controllers import intialize_controllers
 from .database import initialize_database
 from .uploads import initialize_uploads
+from .forms import initialize_forms
 
 DB_PATH = path.join(path.dirname(path.realpath(__file__)), 'database.db')
 
@@ -29,5 +30,6 @@ def create_app():
         return User.query.get(int(id))
     
     initialize_uploads(app)
+    initialize_forms(app)
 
     return app

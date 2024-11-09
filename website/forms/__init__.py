@@ -1,4 +1,10 @@
-from flask import flash
+from flask import flash, Flask
+from flask_wtf import CSRFProtect
+
+csrf = CSRFProtect()
+
+def initialize_forms(app: Flask):
+    csrf.init_app(app)
 
 def flash_errors(form):
     """Flashes form errors"""

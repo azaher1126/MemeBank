@@ -49,6 +49,7 @@
                     {% else %}
                     <div class="dropdown-menu dropdown-menu-right" style="width: 300px;">
                         <form class="px-4 py-3" action="/login?next={{ request.full_path }}" method="post">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                             <div class="form-group">
                                 <label for="email">Email Address/Username</label>
                                 <input type="text" class="form-control" id="email" name="email"
