@@ -18,7 +18,7 @@
 {% block scripts %}
 <script src="{{ url_for('static', filename='js/meme-script.js') }}"></script>
 <script>
-    window.last_meme_id = '{{ "undefined" if res["memes"]|length == 0 else res["memes"][-1].id }}';
+    window.last_meme_id = '{{ "undefined" if user.memes|length == 0 else user.memes[-1].id }}';
     document.getElementById('memes').addEventListener('scroll', function () {
       load_new_page();
     }, {
