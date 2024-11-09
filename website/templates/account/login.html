@@ -10,20 +10,20 @@
 <div class="d-flex flex-column align-items-center w-100">
   <h3>Login</h3>
   <form method="POST" class="form account-form">
+    {{ login_form.csrf_token }}
     <div class="form-group">
-      <label for="email">Email Address/Username</label>
-      <input type="email" class="form-control" id="email" name="email" placeholder="Enter email" />
+      {{ login_form.username_or_email.label }}
+      {{ login_form.username_or_email(class="form-control") }}
     </div>
     <div class="form-group">
-      <label for="password">Password</label>
-      <input type="password" class="form-control" id="password" name="password" placeholder="Enter password" />
+      {{ login_form.password.label }}
+      {{ login_form.password(class="form-control") }}
     </div>
     <div class="form-group">
-      <label for="remember-me" style="padding-right: 8px;"><span>
-          <input id="remember-me" name="remember-me" type="checkbox"></span>
-        <span>Remember Me</span></label><br>
+      {{ login_form.remember_me }}
+      {{ login_form.remember_me.label }}
       <div class="text-center">
-        <button type="submit" class="btn btn-primary">Login</button>
+        {{ login_form.submit(class="btn btn-primary") }}
       </div>
     </div>
   </form>

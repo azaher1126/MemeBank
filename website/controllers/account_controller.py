@@ -8,6 +8,9 @@ from ..database.meme_model import Meme
 from ..database import db
 from ..models.user_model import UserType
 from ..models.meme_model import convert_to_memetype
+from ..forms.login_form import LoginForm
+from ..forms.register_form import RegisterForm
+from ..forms import flash_errors
 from .helpers.anonymous_only import anonymous_only
 
 account_blueprint = Blueprint('account', __name__)
@@ -15,6 +18,7 @@ account_blueprint = Blueprint('account', __name__)
 @account_blueprint.route('/register', methods=['GET', 'POST'])
 @anonymous_only
 def register():
+    register_form: RegisterForm = RegisterForm()
     if request.method == 'POST':
         email = request.form.get('email')
         username = request.form.get('username')
@@ -51,27 +55,30 @@ def register():
             next_url = request.args.get('next')
             return redirect(next_url or url_for('public.home'))
 
-    return render_template("account/register.html")
+    return render_template("account/register.html", register_form=register_form)
 
 @account_blueprint.route('/login', methods=['GET', 'POST'])
 @anonymous_only
 def login():
-    if request.method == 'POST':
-        email = request.form.get('email')
-        password = request.form.get('password')
-        rememeber_me = request.form.get('remember-me')
+    login_form: LoginForm = LoginForm(formdata=request.form)
+    if login_form.validate_on_submit():
+        email = login_form.username_or_email.data
+        password = login_form.password.data
+        remember_me = login_form.remember_me.data
         user = User.query.filter(or_(User.email==email,User.username==email)).first()
         if user:
             if check_password_hash(user.password, password):
                 flash('Logged in successfully!', category='success')
-                login_user(user, remember=rememeber_me)
+                login_user(user, remember=remember_me)
                 next_url = request.args.get('next')
                 return redirect(next_url or url_for('public.home'))
             else:
                 flash('Incorrect password, try again.', category='error')
         else:
             flash('Email does not exist.', category='error')
-    return render_template("account/login.html")
+    else:
+        flash_errors(login_form)
+    return render_template("account/login.html", login_form=login_form)
 
 @account_blueprint.route('/logout')
 @login_required
