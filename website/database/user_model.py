@@ -10,6 +10,8 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(150), unique=True)
     first_name = db.Column(db.String(150))
     last_name = db.Column(db.String(150))
+    profile_url = db.Column(db.String(200), nullable=True)
+    description = db.Column(db.String(1000), nullable=True)
     memes = db.relationship('Meme', back_populates='uploader', cascade="all, delete-orphan")
     default_sorting = db.Column(db.Integer)
 

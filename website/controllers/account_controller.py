@@ -1,5 +1,5 @@
 from sqlalchemy import or_, and_, desc
-from flask import Blueprint, render_template, request, redirect, flash, abort
+from flask import Blueprint, render_template, request, redirect, flash, abort, send_from_directory
 from flask_login import login_user, login_required, logout_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask.helpers import url_for
@@ -11,6 +11,7 @@ from ..models.meme_model import convert_to_memetype
 from ..forms.login_form import LoginForm
 from ..forms.register_form import RegisterForm
 from ..forms import flash_errors
+from ..uploads.profile_uploads import profile_uploads
 from .helpers.anonymous_only import anonymous_only
 
 account_blueprint = Blueprint('account', __name__)
@@ -98,6 +99,16 @@ def profile(username):
     memes = db.session.query(Meme).order_by(desc(Meme.date)).filter(and_(Meme.id < last_meme.id, Meme.user_id==user.id)).limit(20).all()
     memesT = convert_to_memetype(memes)
     return render_template('components/meme_page.html', memes=memesT)
+
+@account_blueprint.route('/profile/image/<path:id>')
+def get_profile_image(id):
+    user = db.session.query(User).filter(User.id == id).first()
+    if not user:
+        abort(404)
+    if not user.profile_url:
+        return send_from_directory('assets', 'default_profile.jpg')
+    else:
+        return send_from_directory(profile_uploads.config.destination, user.profile_url)
 
 @account_blueprint.route('/settings')
 @login_required
