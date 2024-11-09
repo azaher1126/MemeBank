@@ -20,7 +20,7 @@
   {{ super() }}
   <script src="{{ url_for('static', filename='js/meme-script.js') }}"></script>
   <script>
-    window.last_meme_id = '{{ memes[-1].id }}';
+    window.last_meme_id = '{{"undefined" if memes|length == 0 else memes[-1].id }}';
     document.getElementById('memes').addEventListener('scroll', function () {
       load_new_page();
     }, {

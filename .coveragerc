@@ -1,0 +1,11 @@
+[run]
+branch = True
+source = ./website
+omit =
+    website/database/migrations/*
+    website/templates/*
+    **/*.db
+    website/config/*
+
+[report]
+show_missing = True

@@ -24,3 +24,7 @@ class TestConfig(Config):
     if not Config.RECAPTCHA_PRIVATE_KEY:
         RECAPTCHA_PRIVATE_KEY = ''
     TESTING = True
+
+    def __init__(self, db_path, uploads_base_path):
+        TestConfig.DB_PATH = db_path
+        TestConfig.UPLOADS_BASE_PATH = uploads_base_path
