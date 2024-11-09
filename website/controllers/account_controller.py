@@ -19,34 +19,21 @@ account_blueprint = Blueprint('account', __name__)
 @anonymous_only
 def register():
     register_form: RegisterForm = RegisterForm()
-    if request.method == 'POST':
-        email = request.form.get('email')
-        username = request.form.get('username')
-        first_name = request.form.get('first_name')
-        last_name = request.form.get('last_name')
-        password1 = request.form.get('password1')
-        password2 = request.form.get('password2')
+    if register_form.validate_on_submit():
+        email = register_form.email.data
+        username = register_form.username.data
+        first_name = register_form.first_name.data
+        last_name = register_form.last_name.data
+        password = register_form.password.data
 
-        user = User.query.filter_by(email=email).first()
-        profile_name = User.query.filter_by(username=username).first()
-        if user:
-            flash('Email already exists.', category='error')
-        elif profile_name:
-            flash('Username already exists.', category='error')
-        elif len(email) < 4:
-            flash('Email must be greater than 3 characters.', category='error')
-        elif '@queensu.ca' not in email:
-            flash('Email must end with @queensu.ca', category='error')
-        elif len(first_name) < 2:
-            flash('First name must be greater than 1 character.', category='error')
-        elif len(first_name) < 2:
-            flash('First name must be greater than 1 character.', category='error')
-        elif password1 != password2:
-            flash('Passwords don\'t match.', category='error')
-        elif len(password1) < 7:
-            flash('Password must be at least 7 characters.', category='error')
+        existing_user = db.session.query(User).filter(or_(User.email == email, User.username == username)).first()
+        if existing_user:
+            if existing_user.email == email:
+                flash('Email already exists.', category='error')
+            else:
+                flash('Username already exists.', category='error')
         else:
-            new_user = User(email=email, username=username, first_name=first_name, last_name=last_name, password=generate_password_hash(password1, method='sha256'))
+            new_user = User(email=email, username=username, first_name=first_name, last_name=last_name, password=generate_password_hash(password))
             db.session.add(new_user)
             db.session.commit()
             login_user(new_user)
@@ -54,7 +41,8 @@ def register():
 
             next_url = request.args.get('next')
             return redirect(next_url or url_for('public.home'))
-
+    else:
+        flash_errors(register_form)
     return render_template("account/register.html", register_form=register_form)
 
 @account_blueprint.route('/login', methods=['GET', 'POST'])

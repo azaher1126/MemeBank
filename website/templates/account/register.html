@@ -10,34 +10,37 @@
 <div id="login-box" class="d-flex flex-column align-items-center w-100">
   <h3>Register</h3>
   <form method="POST" class="form account-form">
+    {{ register_form.csrf_token }}
     <div class="form-group">
-      <label for="email">Email Address</label>
-      <input type="email" class="form-control" id="email" name="email" placeholder="email" />
-      <div class="form-group">
-        <label for="username">Username</label>
-        <input type="text" class="form-control" id="username" name="username" placeholder="username" />
-      </div>
+      {{ register_form.first_name.label }}
+      {{ register_form.first_name(class="form-control") }}
     </div>
     <div class="form-group">
-      <label for="first_name">First Name</label>
-      <input type="text" class="form-control" id="first_name" name="first_name" placeholder="first name" />
+      {{ register_form.last_name.label }}
+      {{ register_form.last_name(class="form-control") }}
     </div>
     <div class="form-group">
-      <label for="last_name">Last Name</label>
-      <input type="text" class="form-control" id="last_name" name="last_name" placeholder="last name" />
+      {{ register_form.username.label }}
+      {{ register_form.username(class="form-control") }}
     </div>
     <div class="form-group">
-      <label for="password1">Password</label>
-      <input type="password" class="form-control" id="password1" name="password1" placeholder="password" />
+      {{ register_form.email.label }}
+      {{ register_form.email(class="form-control") }}
     </div>
     <div class="form-group">
-      <label for="password2">Password (Confirm)</label>
-      <input type="password" class="form-control" id="password2" name="password2"
-        placeholder="confirm password" />
+      {{ register_form.password.label }}
+      {{ register_form.password(class="form-control") }}
+    </div>
+    <div class="form-group">
+      {{ register_form.confirm_password.label }}
+      {{ register_form.confirm_password(class="form-control") }}
+    </div>
+    <div class="form-group">
+      {{ register_form.captcha }}
     </div>
     <div class="form-group">
       <div class="text-center">
-        <button type="submit" class="btn btn-primary">Register</button>
+        {{ register_form.submit(class="btn btn-primary") }}
       </div>
     </div>
   </form>
