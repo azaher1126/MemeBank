@@ -22,6 +22,9 @@
     border-radius: 3.5rem;
     margin: 0 1rem;
   }
+  .profile-desc-box p {
+    margin: 0;
+  }
 </style>
 {% endblock %}
 
@@ -29,10 +32,12 @@
 <div class="profile-container">
     <div class="profile-info-box">
       <img src="{{ user.profile_image_url }}">
-      <div>
+      <div class="profile-desc-box">
         <h3 class="m-0" {% if user.username == 'azaher1126' %} style="color: gold;" {% endif %}>{{user.username}}</h3>
         {% if user.description %}
-          {{ user.description }}
+          {% for line in user.description %}
+            <p>{{line}}</p>
+          {% endfor %}
         {% endif %}
       </div>
     </div>
