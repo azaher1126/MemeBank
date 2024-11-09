@@ -39,6 +39,10 @@ a:hover {
     height: 100%;
     overflow: hidden;
     flex: 1;
+    margin-top: 0.5rem;
+}
+.content-container:has(.main-container) {
+    margin: 0;
 }
 .sidebar {
     white-space: nowrap;

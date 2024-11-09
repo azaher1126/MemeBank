@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'main_base.html' %}
 {% import "components/meme-components.html" as meme_comps %}
 
 {% block title %}Meme{% endblock %}
@@ -21,7 +21,7 @@
 </style>
 {% endblock %}
 
-{% block body %}
+{% block content %}
 <div class="meme-detailed">
   <a href="/profile/{{meme.username}}" {% if meme.username == 'azaher1126' %} style="color: gold;" {% endif %}>{{meme.username}}</a>
   <img class="rounded mw-100" src="../{{meme.url}}">
@@ -44,5 +44,6 @@
 </div>
 {% endblock %}
 {% block scripts %}
+{{ super() }}
 <script src="{{ url_for('static', filename='js/meme-script.js') }}"></script>
 {% endblock %}

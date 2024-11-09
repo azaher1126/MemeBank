@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'main_base.html' %}
 {% block title %}Upload{% endblock %}
 
 {% block head %}
@@ -34,7 +34,7 @@
 </style>
 {% endblock %}
 
-{% block body %}
+{% block content %}
   <div class="d-flex flex-column w-100 align-items-center">
     <h2>Meme Upload</h1>
       <form class="upload-form" method="POST" action="" enctype="multipart/form-data">
@@ -56,6 +56,7 @@
   </div>
 {% endblock %}
 {% block scripts %}
+{{ super() }}
 <script>
   function readURL(input) {
     if (input.files && input.files[0]) {

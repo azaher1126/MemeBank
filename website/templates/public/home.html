@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'main_base.html' %}
 {% import "components/meme-components.html" as meme_comps %}
 
 {% block title %}Home{% endblock %}
@@ -8,7 +8,7 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/meme-style.css') }}">
 {% endblock %}
 
-{% block body %}
+{% block content %}
 <!-- Page content -->
   <div id="memes" class="meme-container">
     {% for meme in memes %}
@@ -17,6 +17,7 @@
   </div>
 {% endblock %}
 {% block scripts %}
+  {{ super() }}
   <script src="{{ url_for('static', filename='js/meme-script.js') }}"></script>
   <script>
     window.last_meme_id = '{{ memes[-1].id }}';

@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<div class="d-flex flex-column">
+    <div class="bg-dark sidebar">
+        <button onclick="toggleSidebar()"><h4 class="title">Popular Tags</h4></button>
+        <ul id="sidebar-links" class="nav nav-pills flex-column  hidden">
+          <li class="nav-item">
+            <a href="/search?search=gif" class="link-button">gif</a>
+          </li>
+          <li class="nav-item">
+            <a href="/search?search=funny" class="link-button">funny</a>
+          </li>
+          <li class="nav-item">
+            <a href="/search?search=facebook" class="link-button">facebook</a>
+          </li>
+          <li class="nav-item">
+            <a href="/search?search=cursed" class="link-button cursed">cursed</a>
+          </li>
+          <li class="nav-item">
+            <a href="/search?search=deepFRIED" class="link-button">deepFRIED</a>
+          </li>
+          <li class="nav-item">
+            <a href="/search?search=NSFW" class="link-button">NSFW</a>
+          </li>
+          <li class="nav-item">
+            <a href="/search?search=coding" class="link-button">coding</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="d-flex flex-column mx-3 mt-2 w-100 main-container">
+    {% block content %}{% endblock %}
+    </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function toggleSidebar() {
+        const sidebarLinks = document.getElementById('sidebar-links');
+        sidebarLinks.classList.toggle('hidden');
+    }
+</script>
+{% endblock %}

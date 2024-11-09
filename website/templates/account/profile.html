@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'main_base.html' %}
 {% import "components/meme-components.html" as meme_comps %}
 
 {% block title %}{{user.username}}{% endblock %}
@@ -28,7 +28,7 @@
 </style>
 {% endblock %}
 
-{%block body %}
+{%block content %}
 <div class="profile-container">
     <div class="profile-info-box">
       <img src="{{ user.profile_image_url }}">
@@ -49,6 +49,7 @@
   </div>
 {% endblock %}
 {% block scripts %}
+{{ super() }}
 <script src="{{ url_for('static', filename='js/meme-script.js') }}"></script>
 <script>
     window.last_meme_id = '{{ "undefined" if user.memes|length == 0 else user.memes[-1].id }}';
