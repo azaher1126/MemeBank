@@ -11,7 +11,4 @@ class TagType():
         self.name = tag.name
 
 def convert_to_tagtype(tags: list[Tag]) -> list[TagType]:
-    tagT = []
-    for tag in tags:
-        tagT.append(TagType(tag))
-    return tagT
+    return [TagType(tag) for tag in tags]

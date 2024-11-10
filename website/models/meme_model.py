@@ -30,10 +30,4 @@ class MemeType():
 def convert_to_memetype(memes: list[Meme]) -> list[MemeType]:
         '''Converts a list of memes from the database into a list of memes 
         of type MemeType.'''
-        if len(memes) == 0:
-            return []
-        if len(memes) == 1:
-            return [MemeType(memes[0])]
-        meme = memes[0]
-        del memes[0]
-        return [MemeType(meme)] + convert_to_memetype(memes)
+        return [MemeType(meme) for meme in memes]
