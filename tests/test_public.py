@@ -5,3 +5,10 @@ class PublicTests(BaseTestClass):
         """Test the home page"""
         response = self.client.get('/')
         self.assertEqual(response.status_code, 200)
+        self.assertIn('memes', response.text)
+
+    def test_about(self):
+        """Test the about page"""
+        response = self.client.get('/about')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('About', response.text)
