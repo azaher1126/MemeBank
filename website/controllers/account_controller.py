@@ -30,9 +30,9 @@ def register():
         existing_user = db.session.query(User).filter(or_(User.email == email, User.username == username)).first()
         if existing_user:
             if existing_user.email == email:
-                flash('Email already exists.', category='error')
+                flash('Email already belongs to an account, login instead.', category='error')
             else:
-                flash('Username already exists.', category='error')
+                flash('Username already exists, please choose another one.', category='error')
         else:
             new_user = User(email=email, username=username, first_name=first_name, last_name=last_name, password=generate_password_hash(password))
             db.session.add(new_user)

@@ -34,6 +34,9 @@ def create_app(config: Config):
     def load_user(id):
         return User.query.get(int(id))
     
+    assets_dir = path.join(path.dirname(path.realpath(__file__)), 'assets')
+    app.config['ASSETS_DIR_PATH'] = assets_dir
+    
     initialize_uploads(app)
     initialize_forms(app)
 
