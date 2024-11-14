@@ -6,3 +6,6 @@ __pycache__
 .env
 .coverage
 htmlcov/
+
+website/database.db
+website/uploads/memes/*
