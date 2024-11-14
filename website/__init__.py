@@ -12,15 +12,13 @@ env_path = path.join(path.dirname(path.realpath(__file__)), path.pardir, '.env')
 load_dotenv(env_path)
 from .config import Config
 
-DB_PATH = path.join(path.dirname(path.realpath(__file__)), 'database.db')
-
 def create_app(config: Config):
     '''Creates the server instance and sets up all views and databases.'''
     app = Flask(__name__)
     app.config.from_object(config)
     app.config['MAX_CONTENT_LENGTH'] = 25165824
 
-    initialize_database(app, config.DB_PATH or DB_PATH)
+    initialize_database(app, config.DB_PATH)
 
     initialize_controllers(app)
 
