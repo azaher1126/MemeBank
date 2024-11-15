@@ -100,9 +100,8 @@ def unlike():
 def search():
     '''Gets the string that the user would like to search with then 
     splits it into individual tags and searches the database for each tag.
-    It combines each list of memes into one list and runs combine_memes and then 
-    convert_to_memetype on the combined list and displays and passes the memes 
-    to the search page.'''
+    It combines all of the memes into a single list and sorts it from newest
+    to oldest and passes the first 20 memes to the search page.'''
     tags = request.args.get('search')
     if not tags or tags == '':
         flash('Invaild Search!', category='error')
