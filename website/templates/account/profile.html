@@ -33,7 +33,7 @@
     <div class="profile-info-box">
       <img src="{{ user.profile_image_url }}">
       <div class="profile-desc-box">
-        <h3 class="m-0" {% if user.username == 'azaher1126' %} style="color: gold;" {% endif %}>{{user.username}}</h3>
+        <h3 class="m-0" style="color: {{user.username_colour}}">{{user.username}}</h3>
         {% if user.description %}
           {% for line in user.description %}
             <p>{{line}}</p>

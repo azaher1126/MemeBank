@@ -25,6 +25,7 @@ class MemeType():
         self.likes = len(meme.users_liked)
         self.user_id = meme.user_id
         self.username = meme.uploader.username
+        self.username_colour = meme.uploader.username_colour
         self.date = meme.date.isoformat()
     
 def convert_to_memetype(memes: list[Meme]) -> list[MemeType]:
