@@ -23,7 +23,7 @@
 
 {% block content %}
 <div class="meme-detailed">
-  <a href="/profile/{{meme.username}}" {% if meme.username == 'azaher1126' %} style="color: gold;" {% endif %}>{{meme.username}}</a>
+  <a href="/profile/{{meme.username}}" id="profile-username" data-color="{{meme.username_colour}}">{{meme.username}}</a>
   <img class="rounded mw-100" src="../{{meme.url}}">
   <div class="meme-description">
     {{ meme_comps.meme_tags(meme.tags) }}
@@ -45,5 +45,9 @@
 {% endblock %}
 {% block scripts %}
 {{ super() }}
+<script>
+  const title = document.getElementById('profile-username');
+    title.style.color = title.getAttribute('data-color');
+</script>
 <script src="{{ url_for('static', filename='js/meme-script.js') }}"></script>
 {% endblock %}
