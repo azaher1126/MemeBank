@@ -1,3 +1,8 @@
+const memesUsername = document.getElementsByClassName("meme-username");
+for (element of memesUsername) {
+    element.style.color = element.getAttribute('data-color');
+}
+
 function like(id) {
     const requestData = new FormData();
     requestData.append('id', id);
