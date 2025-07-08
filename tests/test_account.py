@@ -147,3 +147,16 @@ class AccountTests(BaseTestClass):
         default_profile_path = path.join(self.app.config['ASSETS_DIR_PATH'],'default_profile.jpg')
         with open(default_profile_path, 'rb') as default_profile:
             self.assertEqual(response.data, default_profile.read())
+
+    def test_anonymous_forget_password(self):
+        """Test that the forgot password page is accessible when not logged in"""
+        response = self.client.get('/forget_password')
+        self.assertEqual(response.status_code, 200)
+
+    def test_logged_in_forget_password(self):
+        """Test that the forgot password page redirects when logged in"""
+        self.createTestUser()
+        with self.logged_in_context():
+            response = self.client.get('/forget_password')
+            self.assertEqual(response.status_code, 302)
+            self.assertEqual(response.location, '/')
