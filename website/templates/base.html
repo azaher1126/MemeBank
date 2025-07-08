@@ -61,14 +61,15 @@
                                     <input type="password" class="form-control" id="password" name="password"
                                         placeholder="Enter password" />
                                 </div>
-                                <label for="remember-me" style="padding-right: 8px;"><span>
-                                    <input id="remember-me" name="remember_me" type="checkbox"></span>
-                                <span>Remember Me</span></label><br>
+                                <div class="mb-3 d-flex align-items-center">
+                                    <input id="remember-me" name="remember_me" type="checkbox">
+                                    <label for="remember-me" class="mb-0 ml-2">Remember Me</label>
+                                </div>
                                 <button type="submit" class="btn btn-primary">Sign in</button>
                             </form>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="/register">New around here? Sign up</a>
-                            <a class="dropdown-item" href="/forget_password">Forgot password?</a>
+                            <a class="dropdown-item" href="/forget_password">Forget password?</a>
                         </div>
                         {% endif %}
                     </div>
@@ -78,22 +79,26 @@
     </nav>
     <!--navbar end -->
     <!--Messages Start-->
-    {% with messages = get_flashed_messages(with_categories=true)%} {% if
-    messages %} {% for category, message in messages %} {% if category == 'error' %}
-    <div class="alert alert-danger alter-dismissable fade show" role="alert">
-        {{message}}
-        <button type="button" class="close" data-dismiss="alert">
-            <span aria-hidden="true">&times;</span>
-        </button>
+    {% with messages = get_flashed_messages(with_categories=true)%} 
+    {% if messages %}
+    <div class="mb-3">
+        {% for category, message in messages %} {% if category == 'error' %}
+        <div class="alert alert-danger alter-dismissable fade show mb-0" role="alert">
+            {{message}}
+            <button type="button" class="close" data-dismiss="alert">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        {% else %}
+        <div class="alert alert-success alter-dismissable fade show mb-0" role="alert">
+            {{message}}
+            <button type="button" class="close" data-dismiss="alert">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        {% endif %} {% endfor %}
     </div>
-    {% else %}
-    <div class="alert alert-success alter-dismissable fade show" role="alert">
-        {{message}}
-        <button type="button" class="close" data-dismiss="alert">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-    {% endif %} {% endfor %} {% endif %} {% endwith %}
+    {% endif %} {% endwith %}
     <!--Messages End-->
     <div class="content-container">
         {% block body %}{% endblock %}
