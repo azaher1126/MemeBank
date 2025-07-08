@@ -1,5 +1,5 @@
 from os import path
-from base_test_class import BaseTestClass
+from .base_test_class import BaseTestClass
 
 class AccountTests(BaseTestClass):
     def test_logged_in_home(self):

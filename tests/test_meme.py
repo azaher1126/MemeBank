@@ -2,7 +2,7 @@ from io import BytesIO
 from os import path
 from werkzeug.datastructures import FileStorage
 
-from base_test_class import BaseTestClass
+from .base_test_class import BaseTestClass
 
 class MemeTests(BaseTestClass):
     def test_get_meme_image(self):
