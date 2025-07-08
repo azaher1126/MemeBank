@@ -87,3 +87,6 @@ class BaseTestClass(unittest.TestCase):
             test_user = db.session.query(User).filter(User.id == self.test_user_id).first()
             login_user(test_user)
             yield
+
+    def assertStartsWith(self, actual: str, start: str):
+        self.assertTrue(actual.startswith(start), f"Expected '{actual}' to start with '{start}'.")

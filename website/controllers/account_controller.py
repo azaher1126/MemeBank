@@ -109,8 +109,3 @@ def get_profile_image(id):
         return send_from_directory('assets', 'default_profile.jpg')
     else:
         return send_from_directory(profile_uploads.config.destination, user.profile_url)
-
-@account_blueprint.route('/settings')
-@login_required
-def settings():
-    return render_template('account/settings.html')
