@@ -98,7 +98,7 @@ class MemeTests(BaseTestClass):
         with self.logged_in_context():
             response = self.client.post('/upload', data= dict(
                 meme=meme_file,
-                tags='test meme'
+                tags='[{"value": "test meme"}]'
             ), content_type='multipart/form-data')
             self.assertEqual(response.status_code, 302)
             self.assertEqual(response.location, '/')
