@@ -23,8 +23,7 @@ def upload_file():
         meme_rec = Meme(user_id=current_user.id)
         db.session.add(meme_rec)
 
-        tagtext = request.form.get('tags')
-        tags = tagtext.split()
+        tags = upload_form.get_tags()
         for tag in tags:
             dbTag = db.session.query(Tag).filter(Tag.name==tag).scalar()
             if not dbTag:
@@ -32,14 +31,14 @@ def upload_file():
             meme_rec.tags.append(dbTag)
 
         file = upload_form.meme.data
-        extention = os.path.splitext(file.filename)[1]
+        extension = os.path.splitext(file.filename)[1]
 
-        filename = f'meme_{meme_rec.id}{extention}'
+        filename = f'meme_{meme_rec.id}{extension}'
         meme_uploads.save(file, name=filename)
         meme_rec.url = filename
 
         db.session.commit()
-        flash('Meme Succefully Uploaded!', category='success')
+        flash('Meme Successfully Uploaded!', category='success')
         return redirect(url_for('public.home'))
     else:
         flash_errors(upload_form)
@@ -117,7 +116,7 @@ def search():
 
 def search(tags: str, last_id: int | None):
     multi_memes = []
-    split_tags = tags.split()
+    split_tags = [tag.strip() for tag in tags.split(',')]
     db_tags = db.session.query(Tag).filter(Tag.name.in_(split_tags)).all()
     if len(db_tags) == 0:
         return multi_memes

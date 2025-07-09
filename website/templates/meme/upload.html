@@ -3,6 +3,7 @@
 
 {% block head %}
 {{ super() }}
+<link href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
 <style>
   .upload-form {
     max-width: 400px;
@@ -31,6 +32,15 @@
     z-index: 2;
     position: relative;
   }
+
+  .image-area img[src="#"] {
+    opacity: 0;
+  }
+
+  .tagify {
+    text-align: left;
+    margin-bottom: 0.25rem;
+  }
 </style>
 {% endblock %}
 
@@ -50,14 +60,18 @@
             class="img-fluid rounded shadow-sm mx-auto d-block"></div>
 
           {{ upload_form.tags(class="form-control", placeholder="Tags") }}
-        <p class="mb-1">Note: separate tags with spaces.</p>
         {{ upload_form.submit(class="btn btn-primary") }}
       </form>
   </div>
 {% endblock %}
 {% block scripts %}
 {{ super() }}
+<script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify"></script>
+<script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.polyfills.min.js"></script>
 <script>
+  const tags_input = document.getElementById("tags");
+  new Tagify(tags_input)
+
   function readURL(input) {
     if (input.files && input.files[0]) {
       var reader = new FileReader();
