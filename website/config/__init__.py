@@ -14,10 +14,10 @@ class DevelopmentConfig(Config):
         super().__init__()
         if not self.SECRET_KEY:
             raise Exception("SECRET_KEY must be provided in .env file.")
-        if not self.RECAPTCHA_PUBLIC_KEY:
-            raise Exception("RECAPTCHA_PUBLIC_KEY must be provided in .env file.")
-        if not self.RECAPTCHA_PRIVATE_KEY:
-            raise Exception("RECAPTCHA_PRIVATE_KEY must be provided in .env file.")
+        if not self.RECAPTCHA_PUBLIC_KEY or not self.RECAPTCHA_PRIVATE_KEY:
+            self.RECAPTCHA_PUBLIC_KEY = ''
+            self.RECAPTCHA_PRIVATE_KEY = ''
+            self.TESTING = True
 
 class TestConfig(Config):
     def __init__(self, db_path, uploads_base_path):
