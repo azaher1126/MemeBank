@@ -8,12 +8,13 @@ class Config():
         self.RECAPTCHA_PRIVATE_KEY = environ.get("RECAPTCHA_PRIVATE_KEY")
         self.UPLOADS_BASE_PATH = environ.get("UPLOADS_BASE_PATH")
         self.DB_PATH = environ.get('DB_PATH')
+        self.APP_PORT = int(environ.get('APP_PORT', 5000))
 
 class DevelopmentConfig(Config):
     def __init__(self):
         super().__init__()
         if not self.SECRET_KEY:
-            raise Exception("SECRET_KEY must be provided in .env file.")
+            raise Exception("SECRET_KEY must be provided as an environment variable or in a .env file.")
         if not self.RECAPTCHA_PUBLIC_KEY or not self.RECAPTCHA_PRIVATE_KEY:
             self.RECAPTCHA_PUBLIC_KEY = ''
             self.RECAPTCHA_PRIVATE_KEY = ''

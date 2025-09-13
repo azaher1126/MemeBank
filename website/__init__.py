@@ -10,12 +10,12 @@ from .forms import initialize_forms
 
 env_path = path.join(path.dirname(path.realpath(__file__)), path.pardir, '.env')
 load_dotenv(env_path)
-from .config import Config
+from .config import Config, DevelopmentConfig
 
-def create_app(config: Config):
+def create_app(config: Config = None) -> Flask:
     '''Creates the server instance and sets up all views and databases.'''
     app = Flask(__name__)
-    app.config.from_object(config)
+    app.config.from_object(config or DevelopmentConfig())
     app.config['MAX_CONTENT_LENGTH'] = 25165824
 
     initialize_database(app, config.DB_PATH)

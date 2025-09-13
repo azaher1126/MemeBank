@@ -15,7 +15,7 @@ pip install -r requirements.txt
 
 1. Install the project dependencies using the command above.
 2. Create a .env file in the root of the repository following the .env.example present in the respository.
-3. Run the `main.py` in the root of the repository.
+3. Run the `app.py` in the root of the repository.
 4. Navigate to `http://127.0.0.1:5000` in any web browser.
 
 ### Running Unit Tests
