@@ -1,15 +1,12 @@
 from flask import Flask
 from flask_login import LoginManager
 from os import path
-from dotenv import load_dotenv
 
 from .controllers import initialize_controllers
 from .database import initialize_database
 from .uploads import initialize_uploads
 from .forms import initialize_forms
 
-env_path = path.join(path.dirname(path.realpath(__file__)), path.pardir, '.env')
-load_dotenv(env_path)
 from .config import Config, DevelopmentConfig
 
 def create_app(config: Config = None) -> Flask:

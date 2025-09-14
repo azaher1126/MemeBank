@@ -1,5 +1,9 @@
 from os import environ
 from secrets import token_hex
+from dotenv import load_dotenv
+import logging
+
+load_dotenv()
 
 class Config():
     def __init__(self):
@@ -14,7 +18,9 @@ class DevelopmentConfig(Config):
     def __init__(self):
         super().__init__()
         if not self.SECRET_KEY:
-            raise Exception("SECRET_KEY must be provided as an environment variable or in a .env file.")
+            self.SECRET_KEY = token_hex()
+            logger = logging.getLogger(__name__)
+            logger.warning("WARNING: SECRET_KEY not set in environment or .env file. Using a random key for development. This will not work in production.")
         if not self.RECAPTCHA_PUBLIC_KEY or not self.RECAPTCHA_PRIVATE_KEY:
             self.RECAPTCHA_PUBLIC_KEY = ''
             self.RECAPTCHA_PRIVATE_KEY = ''
