@@ -46,8 +46,8 @@
 
 {% block content %}
   <div class="d-flex flex-column w-100 align-items-center">
-    <h2>Meme Upload</h1>
-      <form class="upload-form" method="POST" action="" enctype="multipart/form-data">
+    <h2>Meme Upload</h2>
+      <form class="upload-form" method="POST" enctype="multipart/form-data">
         {{ upload_form.csrf_token }}
         <div class="input-group px-2 py-2 rounded-pill bg-white shadow-sm">
           <div class="input-group-append">
@@ -56,10 +56,11 @@
         </div>
 
         <!-- Uploaded image area-->
-        <div class="image-area my-2"><img id="imageResult" src="#" alt=""
-            class="img-fluid rounded shadow-sm mx-auto d-block"></div>
+        <div class="image-area my-2">
+          <img id="imageResult" src="" alt="" class="img-fluid rounded shadow-sm mx-auto d-block">
+        </div>
 
-          {{ upload_form.tags(class="form-control", placeholder="Tags") }}
+        {{ upload_form.tags(class="form-control", placeholder="Tags") }}
         {{ upload_form.submit(class="btn btn-primary") }}
       </form>
   </div>

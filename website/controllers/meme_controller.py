@@ -56,6 +56,8 @@ def view_meme(id):
     '''Gets the meme by its id then displays the meme page and 
     passes the meme data to the page'''
     meme = Meme.query.filter_by(id=id).first()
+    if not meme:
+        abort(404)
     memeT = MemeType(meme)
     return render_template('meme/meme.html',meme=memeT)
 
