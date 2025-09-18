@@ -38,7 +38,7 @@ def register():
             db.session.add(new_user)
             db.session.commit()
             login_user(new_user)
-            flash('Account created!', category='success')
+            flash(f'Welcome {first_name}, your account has been created!', category='success')
 
             next_url = request.args.get('next')
             return redirect(next_url or url_for('public.home'))
@@ -57,7 +57,7 @@ def login():
         user = User.query.filter(or_(User.email==email,User.username==email)).first()
         if user:
             if check_password_hash(user.password, password):
-                flash('Logged in successfully!', category='success')
+                flash(f"Welcome {user.first_name}, you have logged in successfully!", category='success')
                 login_user(user, remember=remember_me)
                 next_url = request.args.get('next')
                 return redirect(next_url or url_for('public.home'))

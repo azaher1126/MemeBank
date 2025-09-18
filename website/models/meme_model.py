@@ -13,6 +13,7 @@ class MemeType():
     likes: int
     user_id: int
     username: str
+    username_colour: str
     date: str
 
     def __init__(self, meme: Meme):
