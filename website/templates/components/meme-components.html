@@ -9,25 +9,26 @@
 </div> 
 {% endmacro %}
 
+{% macro meme_like_button(meme) %}
+    <button data-meme-id="{{meme.id}}" data-liked="{{meme.liked}}" class="like-button">
+        <p class="mx-1">{{meme.likes}}</p>
+        {% if meme.liked %}
+            <span class="fas fa-heart" aria-hidden="true"></span>
+        {% else %}
+            <span class="far fa-heart" aria-hidden="true"></span>
+        {% endif %}
+    </button>
+{% endmacro%}
+
 {% macro meme_preview(meme) %}
-<div id='meme_{{meme.id}}' class="meme">
-    <a href="/profile/{{meme.username}}" data-color="{{meme.username_colour}}" class="meme-username">{{meme.username}}</a>
+<div class="meme" data-meme-id="{{meme.id}}">
+    <a href="/profile/{{meme.username}}" data-username-color="{{meme.username_colour}}" class="meme-username">{{meme.username}}</a>
     <a href="/meme/{{meme.id}}" style="text-decoration: none">
-        <img class="rounded" src="{{meme.url}}" width="300px" height="300px">
+        <img class="rounded" src="{{meme.url}}" width="300px" height="300px" alt="Meme {{meme.url}} image">
     </a>
     <div class="meme-description">
         {{ meme_tags(meme.tags) }}
-        <div class="like-container">
-            {% if meme.liked %}
-            <button class="like-button" id='like_button{{meme.id}}' onclick="unlike('{{meme.id}}')">
-                <span id='heart{{meme.id}}' class="fas fa-heart" aria-hidden="true"></span>
-            </button>
-            {% else %}
-            <button class="like-button" id='like_button{{meme.id}}' onclick="like('{{ meme.id }}')"><span
-                    id='heart{{meme.id}}' class="far fa-heart" aria-hidden="true"></span></button>
-            {% endif %}
-            <p id='like_count{{meme.id}}' style="float: left;">{{meme.likes}}</p>
-        </div>
+        {{ meme_like_button(meme) }}
     </div>
 </div>
 {% endmacro %}

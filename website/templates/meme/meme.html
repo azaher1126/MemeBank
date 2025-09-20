@@ -23,31 +23,17 @@
 
 {% block content %}
 <div class="meme-detailed">
-  <a href="/profile/{{meme.username}}" id="profile-username" data-color="{{meme.username_colour}}">{{meme.username}}</a>
-  <img class="rounded mw-100" src="../{{meme.url}}">
+  <a href="/profile/{{meme.username}}" id="profile-username" data-username-color="{{meme.username_colour}}">{{meme.username}}</a>
+  <img class="rounded mw-100" src="{{meme.url}}" alt="Meme {{meme.url}} image">
   <div class="meme-description">
     {{ meme_comps.meme_tags(meme.tags) }}
     <p>{{ meme.date }}</p>
-    <div class="like-container">
-      {% if meme.liked %}
-      <button class="like-button" id='like_button{{meme.id}}' onclick="unlike('{{meme.id}}')">
-        <span id='heart{{meme.id}}' class="fas fa-heart" aria-hidden="true"></span>
-      </button>
-      {% else %}
-      <button class="like-button" id='like_button{{meme.id}}' onclick="like('{{meme.id}}')"><span id='heart{{meme.id}}'
-          class="far fa-heart" aria-hidden="true"></span></button>
-      {% endif %}
-      <p id='like_count{{meme.id}}' style="float: right;">{{meme.likes}}</p>
-    </div>
+    {{ meme_comps.meme_like_button(meme) }}
   </div>
-  <a href="../{{meme.url}}" download="meme{{meme.id}}" class="btn btn-primary">Download</a>
+  <a href="{{meme.url}}" download="meme{{meme.id}}" class="btn btn-primary">Download</a>
 </div>
 {% endblock %}
 {% block scripts %}
 {{ super() }}
-<script>
-  const title = document.getElementById('profile-username');
-    title.style.color = title.getAttribute('data-color');
-</script>
-<script src="{{ url_for('static', filename='js/meme-script.js') }}"></script>
+<script type="module" src="{{ url_for('static', filename='js/meme-script.js') }}"></script>
 {% endblock %}

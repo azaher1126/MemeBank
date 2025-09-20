@@ -1,0 +1,9 @@
+{% import "components/message-components.html" as message_comps %}
+
+{% with messages = get_flashed_messages(with_categories=true)%} 
+    {% if messages %}
+        {% for category, message in messages %}
+            {{ message_comps.message_banner(category, message) }}
+        {% endfor %}
+    {% endif %} 
+{% endwith %}

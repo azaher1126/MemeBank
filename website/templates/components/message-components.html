@@ -1,0 +1,12 @@
+{% macro message_banner(category, message) %}
+    {% if category == 'error' %}
+        <div class="alert alert-danger alter-dismissable fade show mb-0" role="alert">
+    {% else %}
+        <div class="alert alert-success alter-dismissable fade show mb-0" role="alert">
+    {% endif %} 
+    {{message}}
+        <button type="button" class="close" data-dismiss="alert">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+{% endmacro %}

@@ -33,7 +33,7 @@
     <div class="profile-info-box">
       <img src="{{ user.profile_image_url }}">
       <div class="profile-desc-box">
-        <h3 class="m-0" id="profile-username" data-color="{{user.username_colour}}">{{user.username}}</h3>
+        <h3 class="m-0" id="profile-username" data-username-color="{{user.username_colour}}">{{user.username}}</h3>
         {% if user.description %}
           {% for line in user.description %}
             <p>{{line}}</p>
@@ -50,15 +50,5 @@
 {% endblock %}
 {% block scripts %}
 {{ super() }}
-<script src="{{ url_for('static', filename='js/meme-script.js') }}"></script>
-<script>
-    const title = document.getElementById('profile-username');
-    title.style.color = title.getAttribute('data-color');
-    window.last_meme_id = '{{ "undefined" if user.memes|length == 0 else user.memes[-1].id }}';
-    document.getElementById('memes').addEventListener('scroll', function () {
-      load_new_page();
-    }, {
-      passive: true
-    });
-  </script>
+<script type="module" src="{{ url_for('static', filename='js/meme-script.js') }}"></script>
 {% endblock %}

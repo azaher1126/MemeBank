@@ -61,41 +61,26 @@ def view_meme(id):
     memeT = MemeType(meme)
     return render_template('meme/meme.html',meme=memeT)
 
-@meme_blueprint.route('/api/like', methods=['POST'])
-def like():
+@meme_blueprint.route('/api/toggleLike', methods=['POST'])
+def toggleLike():
     if not current_user.is_authenticated:
         flash('Please log in to start liking memes!', 'error')
-        abort(401)
+        return render_template('components/messages_snippet.html'), 401
     meme_id = request.form.get('id')
     if not meme_id:
         flash('There was an error while processing your request, please try again.', 'error')
-        abort(400)
+        return render_template('components/messages_snippet.html'), 400
     meme = Meme.query.filter_by(id=meme_id).first()
     if not meme:
         flash('Unable to locate meme, it may have been deleted.', 'error')
-        abort(404)
-    if current_user not in meme.users_liked:
-        meme.users_liked.append(current_user)
-        db.session.commit()
-    return jsonify(MemeType(meme))
-
-@meme_blueprint.route('/api/unlike', methods=['POST'])
-def unlike():
-    if not current_user.is_authenticated:
-        flash('Please log in to start unliking memes!', 'error')
-        abort(401)
-    meme_id = request.form.get('id')
-    if not meme_id:
-        flash('There was an error while processing your request, please try again.', 'error')
-        abort(400)
-    meme = Meme.query.filter_by(id=meme_id).first()
-    if not meme:
-        flash('Unable to locate meme, it may have been deleted.', 'error')
-        abort(404)
+        return render_template('components/messages_snippet.html'), 404
+    
     if current_user in meme.users_liked:
         meme.users_liked.remove(current_user)
-        db.session.commit()
-    return jsonify(MemeType(meme))
+    else:
+        meme.users_liked.append(current_user)
+    db.session.commit()
+    return render_template('components/like_button_snippet.html', meme=MemeType(meme))
 
 @meme_blueprint.route('/search', methods=['GET'])
 def search():
