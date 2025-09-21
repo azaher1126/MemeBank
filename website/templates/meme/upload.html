@@ -47,20 +47,21 @@
 {% block content %}
   <div class="d-flex flex-column w-100 align-items-center">
     <h2>Meme Upload</h2>
-      <form class="upload-form" method="POST" enctype="multipart/form-data">
+      <form class="upload-form needs-validation" method="POST" enctype="multipart/form-data" novalidate>
         {{ upload_form.csrf_token }}
-        <div class="input-group px-2 py-2 rounded-pill bg-white shadow-sm">
-          <div class="input-group-append">
-            {{ upload_form.meme(id="file-upload", class="form-control border-0") }}
-          </div>
+        <div>
+          {{ upload_form.meme(id="file-upload", class="form-control py-3 px-4 rounded-pill bg-white shadow-sm") }}
+          <div class="invalid-feedback">Please select a file.</div>
         </div>
 
         <!-- Uploaded image area-->
         <div class="image-area my-2">
           <img id="imageResult" src="" alt="" class="img-fluid rounded shadow-sm mx-auto d-block">
         </div>
-
-        {{ upload_form.tags(class="form-control", placeholder="Tags") }}
+        <div class="mb-1">
+          {{ upload_form.tags(class="form-control", placeholder="Tags") }}
+          <div class="invalid-feedback">Please enter at least one tag.</div>
+        </div>
         {{ upload_form.submit(class="btn btn-primary") }}
       </form>
   </div>
@@ -70,4 +71,5 @@
 <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify"></script>
 <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.polyfills.min.js"></script>
 <script type="module" src="{{ url_for('static', filename='js/upload-script.js') }}"></script>
+<script type="module" src="{{ url_for('static', filename='js/form-script.js') }}"></script>
 {% endblock %}
