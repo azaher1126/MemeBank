@@ -3,7 +3,7 @@
 {% block body %}
 <div class="d-flex flex-column">
     <div class="bg-dark sidebar">
-        <button onclick="toggleSidebar()"><h4 class="title">Popular Tags</h4></button>
+        <button id="sidebar-toggle"><h4 class="title">Popular Tags</h4></button>
         <ul id="sidebar-links" class="nav nav-pills flex-column  hidden">
           <li class="nav-item">
             <a href="/search?search=gif" class="link-button">gif</a>
@@ -35,10 +35,5 @@
 {% endblock %}
 
 {% block scripts %}
-<script>
-    function toggleSidebar() {
-        const sidebarLinks = document.getElementById('sidebar-links');
-        sidebarLinks.classList.toggle('hidden');
-    }
-</script>
+<script type="module" src="{{ url_for('static', filename='js/main-script.js') }}"></script>
 {% endblock %}

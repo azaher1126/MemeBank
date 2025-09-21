@@ -51,7 +51,7 @@
         {{ upload_form.csrf_token }}
         <div class="input-group px-2 py-2 rounded-pill bg-white shadow-sm">
           <div class="input-group-append">
-            {{ upload_form.meme(id="file", class="form-control border-0", onchange="readURL(this);") }}
+            {{ upload_form.meme(id="file-upload", class="form-control border-0") }}
           </div>
         </div>
 
@@ -69,20 +69,5 @@
 {{ super() }}
 <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify"></script>
 <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.polyfills.min.js"></script>
-<script>
-  const tags_input = document.getElementById("tags");
-  new Tagify(tags_input)
-
-  function readURL(input) {
-    if (input.files && input.files[0]) {
-      var reader = new FileReader();
-
-      reader.onload = function (e) {
-        $('#imageResult')
-          .attr('src', e.target.result);
-      };
-      reader.readAsDataURL(input.files[0]);
-    }
-  }
-</script>
+<script type="module" src="{{ url_for('static', filename='js/upload-script.js') }}"></script>
 {% endblock %}
