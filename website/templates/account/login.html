@@ -15,15 +15,15 @@
     <div class="form-floating mb-3">
       {{ login_form.username_or_email(class="form-control") }}
       {{ login_form.username_or_email.label }}
-      <div class="invalid-feedback">Please enter an email or username associated with an account.</div>
+      <div class="invalid-feedback">Please enter an email or username associated with your account.</div>
     </div>
     <div class="input-group mb-2">
       <div class="form-floating">
         {{ login_form.password(class="form-control") }}
         {{ login_form.password.label }}
-        <div class="invalid-feedback">Please enter the password for the account.</div>
+        <div class="invalid-feedback">Please enter the password for your account.</div>
       </div>
-      <button class="btn btn-secondary password-visibility-toggle" type="button">
+      <button class="btn btn-secondary password-visibility-toggle btn-input-height" type="button">
         <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor"><use href="{{url_for('static', filename='sprites/eye.svg')}}#icon-eye"></use></svg>
       </button>
     </div>
