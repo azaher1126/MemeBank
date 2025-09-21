@@ -11,23 +11,23 @@
   <h3>Login</h3>
   <form method="POST" class="form account-form">
     {{ login_form.csrf_token }}
-    <div class="form-group">
-      {{ login_form.username_or_email.label }}
+    <div class="form-floating mb-3">
       {{ login_form.username_or_email(class="form-control") }}
+      {{ login_form.username_or_email.label }}
     </div>
-    <div class="form-group">
-      {{ login_form.password.label }}
+    <div class="form-floating mb-3">
       {{ login_form.password(class="form-control") }}
+      {{ login_form.password.label }}
     </div>
-    <div class="form-group">
+    <div class="mb-2 d-flex align-items-center">
       {{ login_form.remember_me }}
-      {{ login_form.remember_me.label }}
-      <div class="text-center">
+      {{ login_form.remember_me.label(class="mb-0 ms-1") }}
+    </div>
+    <div class="text-center mb-2">
         {{ login_form.submit(class="btn btn-primary") }}
       </div>
-    </div>
   </form>
-    <a style="color: blue;" href="/forget_password">Forget your password?</a>
-    <p>Don't have an account? <a style="color: blue;" href="/register">Register</a></p>
+    <a class="text-primary" href="/forget_password">Forget your password?</a>
+    <p>Don't have an account? <a class="text-primary" href="/register">Register</a></p>
 </div>
 {% endblock %}

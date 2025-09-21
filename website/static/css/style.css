@@ -30,8 +30,8 @@ body {
   ::-webkit-scrollbar-thumb:hover {
     background: #555; 
   }
-a:hover {
-    text-decoration: none!important;
+a {
+    text-decoration: none;
 }
 .content-container {
     display: flex;
@@ -80,6 +80,9 @@ a:hover {
 }
 .link-button:focus {
     outline: none;
+}
+.text-dropdown-item {
+    padding: var(--bs-dropdown-item-padding-y) var(--bs-dropdown-item-padding-x);
 }
 
 @media (max-width: 544px) {
