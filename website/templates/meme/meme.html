@@ -27,7 +27,7 @@
   <img class="rounded mw-100" src="{{meme.url}}" alt="Meme {{meme.url}} image">
   <div class="meme-description">
     {{ meme_comps.meme_tags(meme.tags) }}
-    <p>{{ meme.date }}</p>
+    <p title="Posted at {{meme.formatted_date}}">{{ meme.relative_date }}</p>
     {{ meme_comps.meme_like_button(meme) }}
   </div>
   <a href="{{meme.url}}" download="meme{{meme.id}}" class="btn btn-primary">Download</a>
