@@ -21,7 +21,6 @@ def upload_file():
     upload_form: MemeUploadForm = MemeUploadForm()
     if upload_form.validate_on_submit():
         meme_rec = Meme(user_id=current_user.id)
-        db.session.add(meme_rec)
 
         tags = upload_form.get_tags()
         for tag in tags:
@@ -37,6 +36,7 @@ def upload_file():
         meme_uploads.save(file, name=filename)
         meme_rec.url = filename
 
+        db.session.add(meme_rec)
         db.session.commit()
         flash('Meme Successfully Uploaded!', category='success')
         return redirect(url_for('public.home'))
@@ -65,7 +65,7 @@ def view_meme(id):
 def toggleLike():
     if not current_user.is_authenticated:
         flash('Please log in to start liking memes!', 'error')
-        return render_template('components/messages_snippet.html'), 401
+        abort(401)
     meme_id = request.form.get('id')
     if not meme_id:
         flash('There was an error while processing your request, please try again.', 'error')

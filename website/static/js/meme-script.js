@@ -79,6 +79,10 @@ async function toggleLike() {
         body: requestData
     });
 
+    if (response.status === 401) {
+        window.location.assign("/login");
+    }
+
     const responseContent = await response.text();
     const newDoc = new DOMParser().parseFromString(responseContent, "text/html");
     if (!response.ok) {

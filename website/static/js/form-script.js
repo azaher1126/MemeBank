@@ -1,21 +1,26 @@
 let eyeSpriteUrl = null;
 
 document.addEventListener("DOMContentLoaded", () => {
-    const forms = document.querySelectorAll('form.needs-validation');
+    const validation_forms = document.querySelectorAll('form.needs-validation');
 
-    // Loop over them and prevent submission
-    Array.from(forms).forEach(form => {
+    for (const form of validation_forms) {
         form.addEventListener('submit', event => {
-        if (!form.checkValidity()) {
-            event.preventDefault();
-            event.stopPropagation();
-        }
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            } else {
+                handleFormSubmission(form);
+            }
 
-        form.classList.add('was-validated');
+            form.classList.add('was-validated');
         }, false)
-    })
+    }
 
-    eyeSpriteUrl = document.querySelector('meta[name=eye-sprite-url]').content;
+    const metaEyeSpriteUrl = document.querySelector('meta[name=eye-sprite-url]')
+    if (metaEyeSpriteUrl === null) {
+        return;
+    }
+    eyeSpriteUrl = metaEyeSpriteUrl.content;
 
     const visibilityToggles = document.querySelectorAll('button.password-visibility-toggle');
     Array.from(visibilityToggles).forEach(button => {
@@ -57,4 +62,13 @@ function togglePasswordVisibility() {
 
     inputField.setAttribute("type", "password");
     this.querySelector("use").setAttribute("href", `${eyeSpriteUrl}#icon-eye`);
+}
+
+/**
+ * 
+ * @param {HTMLFormElement} form 
+ */
+function handleFormSubmission(form) {
+    const submitButton = form.querySelector('[type="submit"]');
+    submitButton.disabled = true;
 }
