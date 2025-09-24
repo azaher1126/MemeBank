@@ -2,6 +2,7 @@ from sqlalchemy import desc, and_
 from flask import Blueprint, render_template, request, redirect, flash, abort, jsonify, send_from_directory
 from flask_login import login_required, current_user
 from flask.helpers import url_for
+from PIL import Image
 from ..database.meme_model import Meme
 from ..database.tag_model import Tag
 from ..database import db
@@ -10,6 +11,7 @@ from ..forms.meme_upload_form import MemeUploadForm
 from ..forms import flash_errors
 from ..uploads.meme_uploads import meme_uploads
 import os
+import uuid
 
 meme_blueprint = Blueprint('meme',__name__)
 
@@ -20,7 +22,9 @@ def upload_file():
     for the image to the database and redirects back to homepage.'''
     upload_form: MemeUploadForm = MemeUploadForm()
     if upload_form.validate_on_submit():
-        meme_rec = Meme(user_id=current_user.id)
+        file_uuid = uuid.uuid1().hex
+        file_name = f"meme_{file_uuid}.jpg"
+        meme_rec = Meme(user_id=current_user.id, url=file_name)
 
         tags = upload_form.get_tags()
         for tag in tags:
@@ -30,12 +34,19 @@ def upload_file():
             meme_rec.tags.append(dbTag)
 
         file = upload_form.meme.data
-        extension = os.path.splitext(file.filename)[1]
-
-        filename = f'meme_{meme_rec.id}{extension}'
-        meme_uploads.save(file, name=filename)
-        meme_rec.url = filename
-
+        try:
+            with Image.open(file.stream) as image:
+                if image.format == "JPEG":
+                    file.stream.seek(0)
+                    meme_uploads.save(file, name=file_name)
+                else:
+                    rgb_image = image.convert("RGB")
+                    save_path = os.path.join(meme_uploads.config.destination, file_name)
+                    rgb_image.save(save_path, format="JPEG")
+        except:
+            flash("The uploaded meme is not in a supported format. Please upload a proper image.")
+            return render_template('meme/upload.html', upload_form=upload_form)
+        
         db.session.add(meme_rec)
         db.session.commit()
         flash('Meme Successfully Uploaded!', category='success')
