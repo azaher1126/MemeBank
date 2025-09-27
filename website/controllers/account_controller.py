@@ -1,4 +1,4 @@
-from sqlalchemy import or_, and_, desc
+from sqlalchemy import or_, and_, desc, func
 from flask import Blueprint, render_template, request, redirect, flash, abort, send_from_directory
 from flask_login import login_user, login_required, logout_user
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -22,14 +22,16 @@ def register():
     register_form: RegisterForm = RegisterForm()
     if register_form.validate_on_submit():
         email = register_form.email.data
+        email_lowered = email.lower()
         username = register_form.username.data
+        username_lowered = username.lower()
         first_name = register_form.first_name.data
         last_name = register_form.last_name.data
         password = register_form.password.data
 
-        existing_user = db.session.query(User).filter(or_(User.email == email, User.username == username)).first()
+        existing_user = db.session.query(User).filter(or_(func.lower(User.email) == email_lowered, func.lower(User.username) == username_lowered)).first()
         if existing_user:
-            if existing_user.email == email:
+            if existing_user.email.lower() == email_lowered:
                 flash('Email already belongs to an account, login instead.', category='error')
             else:
                 flash('Username already exists, please choose another one.', category='error')
@@ -54,7 +56,7 @@ def login():
         email = login_form.username_or_email.data
         password = login_form.password.data
         remember_me = login_form.remember_me.data
-        user = User.query.filter(or_(User.email==email,User.username==email)).first()
+        user = User.query.filter(or_(func.lower(User.email)==email.lower(), func.lower(User.username)==email.lower())).first()
         if user:
             if check_password_hash(user.password, password):
                 flash(f"Welcome {user.first_name}, you have logged in successfully!", category='success')
@@ -64,7 +66,7 @@ def login():
             else:
                 flash('Incorrect password, try again.', category='error')
         else:
-            flash('Email does not exist.', category='error')
+            flash('Email or username does not exist.', category='error')
     else:
         flash_errors(login_form)
     return render_template("account/login.html", login_form=login_form)
@@ -75,7 +77,8 @@ def logout():
     logout_user()
     flash("Successfully logged out.", 'success')
     next_url = request.args.get('next')
-    return redirect(next_url or url_for('public.home'))
+    redirect_url = next_url if next_url else url_for('public.home')
+    return redirect(redirect_url)
 
 @account_blueprint.route('/forget_password')
 @anonymous_only
@@ -84,7 +87,7 @@ def forget_password():
 
 @account_blueprint.route('/profile/<path:username>')
 def profile(username):
-    user = db.session.query(User).filter(User.username==username).first()
+    user = db.session.query(User).filter(func.lower(User.username)==username.lower()).first()
     if not user:
         abort(404)
     last_id = request.args.get('last_id')
