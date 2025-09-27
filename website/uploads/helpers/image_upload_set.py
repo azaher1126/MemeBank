@@ -56,3 +56,8 @@ class ImageUploadSet():
             image.save(full_path, format="JPEG")
         except:
             raise ValueError("The uploaded meme is not in a supported format. Please upload a proper image.")
+        
+    def delete(self, filename: str):
+        full_path = os.path.join(self.destination, filename)
+        if os.path.exists(full_path):
+            os.remove(full_path)

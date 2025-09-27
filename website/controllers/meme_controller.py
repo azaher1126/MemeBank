@@ -47,6 +47,27 @@ def upload_file():
         flash_errors(upload_form)
     return render_template('meme/upload.html', upload_form=upload_form)
 
+@meme_blueprint.route("/delete", methods=["POST"])
+@login_required
+def delete_meme():
+    id_str = request.form.get("id")
+    if id_str is None:
+        flash('There was an error while processing your request, please try again.', 'error')
+        return redirect(url_for("public.home")) # Should never happen
+    id = int(id_str)
+    meme_rec = db.session.query(Meme).filter(Meme.id == id).first()
+    if not meme_rec:
+        flash('Unable to locate meme, it may have been deleted.', 'error')
+        return redirect(url_for("public.home"))
+    if current_user.id != meme_rec.user_id:
+        abort(401) # Should never happen
+    
+    meme_uploads.delete(meme_rec.url)
+    db.session.delete(meme_rec)
+    db.session.commit()
+    flash("Successfully deleted meme!")
+    return redirect(url_for("public.home"))
+
 @meme_blueprint.route('/meme/image/<path:id>')
 def get_meme_image(id):
     meme_rec = db.session.query(Meme).filter(Meme.id == id).first()

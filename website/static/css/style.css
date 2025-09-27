@@ -109,6 +109,16 @@ a {
 .white-icon-button:hover svg {
     color: gray;
 }
+.modal-content {
+    color: white;
+    background-color: #131313;
+}
+.modal-content * {
+    border-color: #404040;
+}
+.modal-content .btn-close {
+    filter: invert(92%) sepia(92%) saturate(1%) hue-rotate(151deg) brightness(108%) contrast(100%);
+}
 @media (max-width: 544px) {
     .content-container {
         flex-direction: column;

@@ -24,11 +24,35 @@
             <use href="{{url_for('static', filename='sprites/meme-icons.svg')}}#download-icon"></use>
           </svg>
         </a>
-        <button class="link-danger icon-button">
+        {% if meme.user_id == current_user.id %}
+        <button class="link-danger icon-button" data-bs-toggle="modal" data-bs-target="#deleteModal">
           <svg class="square-1-12" fill="currentColor">
             <use href="{{url_for('static', filename='sprites/meme-icons.svg')}}#trash-icon"></use>
           </svg>
         </button>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="Delete Modal" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Delete Confirmation</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Are you sure you'd like to delete this meme? This action is irreversible.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <form action="/delete" method="post">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+          <input type="hidden" name="id" value="{{meme.id}}">
+          <button type="submit" class="btn btn-danger">Delete</button>
+        </form>
       </div>
     </div>
   </div>
