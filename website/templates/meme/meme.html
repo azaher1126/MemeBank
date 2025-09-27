@@ -6,31 +6,32 @@
 {% block head %}
 {{ super() }}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/meme-style.css') }}">
-<style>
-  .meme-detailed {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  .meme-detailed img {
-    max-height: 70vh;
-  }
-  .meme-description p {
-    margin: 0;
-  }
-</style>
 {% endblock %}
 
 {% block content %}
-<div class="meme-detailed">
-  <a href="/profile/{{meme.username}}" id="profile-username" data-username-color="{{meme.username_colour}}">{{meme.username}}</a>
-  <img class="rounded mw-100" src="{{meme.url}}" alt="Meme {{meme.url}} image">
-  <div class="meme-description">
-    {{ meme_comps.meme_tags(meme.tags) }}
-    <p title="Posted at {{meme.formatted_date}}">{{ meme.relative_date }}</p>
-    {{ meme_comps.meme_like_button(meme) }}
+<div class="d-flex flex-column align-items-center font-size-1-12">
+  <div class="d-flex flex-column">
+    <a href="/profile/{{meme.username}}" id="profile-username"
+      data-username-color="{{meme.username_colour}}">{{meme.username}}</a>
+    <img class="rounded mw-100 mh-70vh" src="{{meme.url}}" alt="Meme {{meme.url}} image">
+    <div class="d-flex flex-nowrap align-items-center justify-content-between">
+      {{ meme_comps.meme_tags(meme.tags) }}
+      <p class="m-0" title="Posted at {{meme.formatted_date}}">{{ meme.relative_date }}</p>
+      <div class="d-flex">
+        {{ meme_comps.meme_like_button(meme) }}
+        <a href="{{meme.url}}" download="meme{{meme.id}}" class="mx-1 white-icon-button icon-button">
+          <svg class="square-1-12" fill="currentColor">
+            <use href="{{url_for('static', filename='sprites/meme-icons.svg')}}#download-icon"></use>
+          </svg>
+        </a>
+        <button class="link-danger icon-button">
+          <svg class="square-1-12" fill="currentColor">
+            <use href="{{url_for('static', filename='sprites/meme-icons.svg')}}#trash-icon"></use>
+          </svg>
+        </button>
+      </div>
+    </div>
   </div>
-  <a href="{{meme.url}}" download="meme{{meme.id}}" class="btn btn-primary">Download</a>
 </div>
 {% endblock %}
 {% block scripts %}

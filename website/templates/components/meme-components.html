@@ -1,8 +1,6 @@
 {% macro meme_tags(tags) %}
 <div class="tag-container">
-    <p>
-        Tags:
-    </p>
+    <p class="m-0">Tags:</p>
     {% for tag in tags %}
         <a href="/search?search={{ tag.name }}">{{ tag.name }}</a>
     {% endfor %}
@@ -10,27 +8,23 @@
 {% endmacro %}
 
 {% macro meme_like_button(meme) %}
-    <button data-meme-id="{{meme.id}}" data-liked="{{meme.liked}}" class="like-button">
-        <p class="mx-1">{{meme.likes}}</p>
+    <button data-meme-id="{{meme.id}}" data-liked="{{meme.liked}}" role="like-button" class="d-flex flex-nowrap align-items-center icon-button white-icon-button">
+        <p class="mx-1 my-0">{{meme.likes}}</p>
         {% if meme.liked %}
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
-                <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314"/>
-            </svg>
+            <svg class="square-1-12" fill="currentColor"><use href="{{url_for('static', filename='sprites/meme-icons.svg')}}#unlike-icon"></use></svg>
         {% else %}
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
-                <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143q.09.083.176.171a3 3 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15"/>
-            </svg>
+            <svg class="square-1-12" fill="currentColor"><use href="{{url_for('static', filename='sprites/meme-icons.svg')}}#like-icon"></use></svg>
         {% endif %}
     </button>
 {% endmacro%}
 
 {% macro meme_preview(meme) %}
-<div class="meme" data-meme-id="{{meme.id}}">
+<div class="meme font-size-1-12" data-meme-id="{{meme.id}}">
     <a href="/profile/{{meme.username}}" data-username-color="{{meme.username_colour}}" class="meme-username">{{meme.username}}</a>
-    <a href="/meme/{{meme.id}}" style="text-decoration: none">
+    <a href="/meme/{{meme.id}}" class="text-decoration-none">
         <img class="rounded" src="{{meme.url}}" width="300px" height="300px" alt="Meme {{meme.url}} image">
     </a>
-    <div class="meme-description">
+    <div class="d-flex flex-nowrap align-items-center justify-content-between">
         {{ meme_tags(meme.tags) }}
         {{ meme_like_button(meme) }}
     </div>

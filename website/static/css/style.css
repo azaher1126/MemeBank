@@ -87,7 +87,28 @@ a {
 .btn-input-height {
     height: calc(3.5rem + calc(var(--bs-border-width) * 2))
 }
-
+.font-size-1-12 {
+    font-size: 1.12rem;
+}
+.square-1-12 {
+    width: 1.12rem;
+    height: 1.12rem;
+}
+.mh-70vh {
+    max-height: 70vh;
+}
+.icon-button {
+    text-decoration: none;
+    background: none;
+    border: none;
+    padding: 0;
+}
+.white-icon-button {
+    color: white;
+}
+.white-icon-button:hover svg {
+    color: gray;
+}
 @media (max-width: 544px) {
     .content-container {
         flex-direction: column;

@@ -14,12 +14,6 @@
 .meme p {
     margin: 0;
 }
-.meme-description {
-    display: flex;
-    flex-wrap: nowrap;
-    justify-content: space-between;
-    align-items: center;
-}
 .tag-container {
     display: flex;
     flex-wrap: nowrap;
@@ -27,14 +21,4 @@
 }
 .tag-container a {
     margin: 0 0.2rem;
-}
-.like-button, .like-button:hover {
-    color: white;
-    text-decoration: none;
-    background: none;
-    border: none;
-    padding: 0;
-    display: flex;
-    flex-wrap: nowrap;
-    align-items: center;
 }

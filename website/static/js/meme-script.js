@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     csrfToken = document.querySelector('meta[name=csrf-token]').content;
 
-    const like_buttons = document.querySelectorAll(".like-button");
+    const like_buttons = document.querySelectorAll("[role=like-button]");
     for (const like_button of like_buttons) {
         like_button.addEventListener("click", toggleLike)
     }
