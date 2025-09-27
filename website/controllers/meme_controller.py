@@ -1,5 +1,5 @@
 from sqlalchemy import desc, and_
-from flask import Blueprint, render_template, request, redirect, flash, abort, jsonify, send_from_directory
+from flask import Blueprint, render_template, request, redirect, flash, abort, send_from_directory
 from flask_login import login_required, current_user
 from flask.helpers import url_for
 from PIL import Image
@@ -10,7 +10,6 @@ from ..models.meme_model import MemeType, convert_to_memetype
 from ..forms.meme_upload_form import MemeUploadForm
 from ..forms import flash_errors
 from ..uploads.meme_uploads import meme_uploads
-import os
 import uuid
 
 meme_blueprint = Blueprint('meme',__name__)
@@ -35,16 +34,9 @@ def upload_file():
 
         file = upload_form.meme.data
         try:
-            with Image.open(file.stream) as image:
-                if image.format == "JPEG":
-                    file.stream.seek(0)
-                    meme_uploads.save(file, name=file_name)
-                else:
-                    rgb_image = image.convert("RGB")
-                    save_path = os.path.join(meme_uploads.config.destination, file_name)
-                    rgb_image.save(save_path, format="JPEG")
-        except:
-            flash("The uploaded meme is not in a supported format. Please upload a proper image.")
+            meme_uploads.save(file.stream, file_name)
+        except Exception as e:
+            flash(e, category="error")
             return render_template('meme/upload.html', upload_form=upload_form)
         
         db.session.add(meme_rec)
@@ -60,7 +52,7 @@ def get_meme_image(id):
     meme_rec = db.session.query(Meme).filter(Meme.id == id).first()
     if not meme_rec:
         abort(404)
-    return send_from_directory(meme_uploads.config.destination, meme_rec.url)
+    return send_from_directory(meme_uploads.destination, meme_rec.url)
 
 @meme_blueprint.route('/meme/<path:id>')
 def view_meme(id):

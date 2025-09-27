@@ -1,14 +1,11 @@
 from flask import Flask
-from flask_uploads import configure_uploads
-from os import path, mkdir
+from os import path
+
+from .helpers.image_upload_set import configure_uploads
 
 def initialize_uploads(app: Flask):
     base_path = app.config.get('UPLOADS_BASE_PATH')
-    if base_path:
-        app.config['UPLOADS_DEFAULT_DEST'] = base_path
-    else:
-        uploads_directory = path.dirname(__file__)
-        app.config['UPLOADS_DEFAULT_DEST'] = uploads_directory
-    
-    from .meme_uploads import meme_uploads
-    configure_uploads(app, (meme_uploads))
+    if not base_path:
+        base_path = path.dirname(__file__)
+
+    configure_uploads(base_path)

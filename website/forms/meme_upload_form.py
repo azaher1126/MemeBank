@@ -7,7 +7,7 @@ import json
 from ..uploads.meme_uploads import meme_uploads
 
 class MemeUploadForm(FlaskForm):
-    meme = FileField('Choose image', validators=[FileRequired(), FileAllowed(meme_uploads, 'Images only!')])
+    meme = FileField('Choose image', validators=[FileRequired(), FileAllowed(meme_uploads.extensions, 'Images only!')])
     tags = StringField('Tags', validators=[DataRequired()])
     submit = SubmitField('Upload')
 

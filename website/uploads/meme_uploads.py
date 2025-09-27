@@ -1,3 +1,3 @@
-from flask_uploads import UploadSet, IMAGES
+from .helpers.image_upload_set import ImageUploadSet
 
-meme_uploads = UploadSet('memes', IMAGES)
+meme_uploads = ImageUploadSet('memes')
