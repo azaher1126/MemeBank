@@ -1,6 +1,6 @@
 from sqlalchemy import or_, and_, desc, func
 from flask import Blueprint, render_template, request, redirect, flash, abort, send_from_directory
-from flask_login import login_user, login_required, logout_user
+from flask_login import login_user, logout_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask.helpers import url_for
 from ..database.user_model import User
@@ -13,6 +13,7 @@ from ..forms.register_form import RegisterForm
 from ..forms import flash_errors
 from ..uploads.profile_uploads import profile_uploads
 from .helpers.anonymous_only import anonymous_only
+from .helpers.login_helpers import is_login_required, login_required
 
 account_blueprint = Blueprint('account', __name__)
 
@@ -77,7 +78,7 @@ def logout():
     logout_user()
     flash("Successfully logged out.", 'success')
     next_url = request.args.get('next')
-    redirect_url = next_url if next_url else url_for('public.home')
+    redirect_url = next_url if next_url and not is_login_required(next_url) else url_for('public.home')
     return redirect(redirect_url)
 
 @account_blueprint.route('/forget_password')

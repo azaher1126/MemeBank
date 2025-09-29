@@ -1,8 +1,7 @@
 from sqlalchemy import desc, and_
 from flask import Blueprint, render_template, request, redirect, flash, abort, send_from_directory
-from flask_login import login_required, current_user
+from flask_login import current_user
 from flask.helpers import url_for
-from PIL import Image
 from ..database.meme_model import Meme
 from ..database.tag_model import Tag
 from ..database import db
@@ -10,6 +9,7 @@ from ..models.meme_model import MemeType, convert_to_memetype
 from ..forms.meme_upload_form import MemeUploadForm
 from ..forms import flash_errors
 from ..uploads.meme_uploads import meme_uploads
+from .helpers.login_helpers import login_required
 import uuid
 
 meme_blueprint = Blueprint('meme',__name__)

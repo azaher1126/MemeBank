@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, abort
-from flask_login import login_required
 from ..database import db
+from .helpers.login_helpers import login_required
 
 settings_blueprint = Blueprint('settings', __name__, url_prefix='/settings')
 
