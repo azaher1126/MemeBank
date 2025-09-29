@@ -6,15 +6,20 @@
 <link href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
 <style>
   .upload-form {
-    max-width: 400px;
+    max-width: max(80%, 400px);
+    min-height: 0;
     text-align: center;
   }
   .image-area {
     border: 2px dashed rgba(255, 255, 255, 0.7);
     padding: 1rem;
     position: relative;
+    min-height: 0;
+    width: fit-content;
   }
-
+  .image-area:has(img[src=""]) {
+    width: 100%;
+  }
   .image-area::before {
     content: 'Uploaded image result';
     color: #fff;
@@ -27,16 +32,13 @@
     font-size: 0.8rem;
     z-index: 1;
   }
-
   .image-area img {
     z-index: 2;
     position: relative;
   }
-
-  .image-area img[src="#"] {
-    opacity: 0;
+  .tag-container {
+    width: min(100%, 400px);
   }
-
   .tagify {
     text-align: left;
     margin-bottom: 0.25rem;
@@ -45,9 +47,9 @@
 {% endblock %}
 
 {% block content %}
-  <div class="d-flex flex-column w-100 align-items-center">
+  <div class="d-flex flex-column w-100. h-100 align-items-center pb-2">
     <h2>Meme Upload</h2>
-      <form class="upload-form needs-validation" method="POST" enctype="multipart/form-data" novalidate>
+      <form class="upload-form needs-validation d-flex flex-column align-items-center" method="POST" enctype="multipart/form-data" novalidate>
         {{ upload_form.csrf_token }}
         <div>
           {{ upload_form.meme(id="file-upload", class="form-control py-3 px-4 rounded-pill bg-white shadow-sm") }}
@@ -55,10 +57,10 @@
         </div>
 
         <!-- Uploaded image area-->
-        <div class="image-area my-2">
-          <img id="imageResult" src="" alt="" class="img-fluid rounded shadow-sm mx-auto d-block">
+        <div class="image-area my-2 d-flex align-items-center justify-content-center">
+          <img id="imageResult" src="" alt="" class="img-fluid rounded shadow-sm mh-100 d-block">
         </div>
-        <div class="mb-1">
+        <div class="mb-1 tag-container">
           {{ upload_form.tags(class="form-control", placeholder="Tags") }}
           <div class="invalid-feedback">Please enter at least one tag.</div>
         </div>
