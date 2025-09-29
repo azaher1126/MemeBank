@@ -37,7 +37,7 @@
                     <button type="submit" class="btn btn-outline-light mx-1" control-id="ControlID-2">Search</button>
                 </form>
                 <div class="navbar-item ml-2 dropdown">
-                    <button class="btn btn-secondary dropdown-toggle bg-dark" type="button" id="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <button class="btn btn-secondary dropdown-toggle bg-dark d-flex align-items-center h-100" type="button" id="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <svg width="21" height="21" fill="currentColor"><use href="{{url_for('static', filename='sprites/main-icons.svg')}}#nav-account-icon"></use></svg>
                     </button>
                     {% if current_user.is_authenticated == True %}

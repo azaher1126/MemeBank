@@ -72,7 +72,7 @@ class BaseTestClass(unittest.TestCase):
             test_meme = Meme(user_id=self.test_user_id, url='test_meme.jpg')
 
             for split_tag in split_tags:
-                dbTag = db.session.query(Tag).filter(Tag.name==split_tag).scalar()
+                dbTag = db.session.query(Tag).filter(Tag.name==split_tag).one_or_none()
                 if not dbTag:
                     dbTag = Tag(name=split_tag)
                 test_meme.tags.append(dbTag)
@@ -80,11 +80,22 @@ class BaseTestClass(unittest.TestCase):
             db.session.add(test_meme)
             db.session.commit()
             return test_meme.id
+        
+    def likeMeme(self, meme_id: int, user_id: int):
+        with self.app.app_context():
+            test_meme = db.session.query(Meme).filter(Meme.id == meme_id).one_or_none()
+            if not test_meme:
+                raise ValueError(f"The meme with id {meme_id} does not exist.")
+            test_user = db.session.query(User).filter(User.id == user_id).one_or_none()
+            if not test_user:
+                raise ValueError(f"The user with id {user_id} does not exist.")
+            test_meme.users_liked.append(test_user)
+            db.session.commit()
 
     @contextmanager
     def logged_in_context(self):
         with self.app.test_request_context():
-            test_user = db.session.query(User).filter(User.id == self.test_user_id).first()
+            test_user = db.session.query(User).filter(User.id == self.test_user_id).one()
             login_user(test_user)
             yield
 

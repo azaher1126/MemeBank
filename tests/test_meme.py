@@ -35,7 +35,7 @@ class MemeTests(BaseTestClass):
         response = self.client.get('/search?search=testtag')
         self.assertEqual(response.status_code, 200)
         self.assertIn('testtag', response.text)
-        self.assertIn(f'meme_{meme_id}', response.text)
+        self.assertIn(f'data-meme-id="{meme_id}"', response.text)
 
     def test_meme_search_lazy_load(self):
         """Test search meme lazy loading"""
@@ -44,8 +44,8 @@ class MemeTests(BaseTestClass):
         last_id = self.createTestMeme('testtag')
         response = self.client.get(f'/search?search=testtag&last_id={last_id}')
         self.assertEqual(response.status_code, 200)
-        self.assertIn(f'meme_{expected_id}', response.text)
-        self.assertNotIn(f'meme_{last_id}', response.text)
+        self.assertIn(f'data-meme-id="{expected_id}"', response.text)
+        self.assertNotIn(f'data-meme-id="{last_id}"', response.text)
 
     def test_no_result_meme_search(self):
         """Test searching for memes by a nonexistent tag"""
@@ -68,22 +68,23 @@ class MemeTests(BaseTestClass):
         self.createTestUser()
         meme_id = self.createTestMeme('test meme')
         with self.logged_in_context():
-            response = self.client.post('/api/like', data=dict(
+            response = self.client.post('/api/toggleLike', data=dict(
                 id=meme_id
             ))
             self.assertEqual(response.status_code, 200)
-            self.assertEqual(response.content_type, 'application/json')
+            self.assertIn("#unlike-icon", response.text)
 
     def test_unlike_meme(self):
         """Test unliking a meme"""
         self.createTestUser()
         meme_id = self.createTestMeme('test meme')
+        self.likeMeme(meme_id, self.test_user_id)
         with self.logged_in_context():
-            response = self.client.post('/api/unlike', data=dict(
+            response = self.client.post('/api/toggleLike', data=dict(
                 id=meme_id
             ))
             self.assertEqual(response.status_code, 200)
-            self.assertEqual(response.content_type, 'application/json')
+            self.assertIn("#like-icon", response.text)
 
     def test_upload_meme(self):
         self.createTestUser()

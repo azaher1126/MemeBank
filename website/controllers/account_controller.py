@@ -30,7 +30,7 @@ def register():
         last_name = register_form.last_name.data
         password = register_form.password.data
 
-        existing_user = db.session.query(User).filter(or_(func.lower(User.email) == email_lowered, func.lower(User.username) == username_lowered)).first()
+        existing_user = db.session.query(User).filter(or_(func.lower(User.email) == email_lowered, func.lower(User.username) == username_lowered)).one_or_none()
         if existing_user:
             if existing_user.email.lower() == email_lowered:
                 flash('Email already belongs to an account, login instead.', category='error')
@@ -57,7 +57,7 @@ def login():
         email = login_form.username_or_email.data
         password = login_form.password.data
         remember_me = login_form.remember_me.data
-        user = User.query.filter(or_(func.lower(User.email)==email.lower(), func.lower(User.username)==email.lower())).first()
+        user = User.query.filter(or_(func.lower(User.email)==email.lower(), func.lower(User.username)==email.lower())).one_or_none()
         if user:
             if check_password_hash(user.password, password):
                 flash(f"Welcome {user.first_name}, you have logged in successfully!", category='success')

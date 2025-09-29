@@ -64,7 +64,7 @@ class AccountTests(BaseTestClass):
             password="TheWrongPassword"
         ))
         self.assertEqual(response.status_code, 200)
-        self.assertIn('Email does not exist', response.text)
+        self.assertIn('Email or username does not exist', response.text)
 
     def test_register_user(self):
         response = self.client.post('/register', data=dict(

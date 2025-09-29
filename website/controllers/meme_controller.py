@@ -27,7 +27,7 @@ def upload_file():
 
         tags = upload_form.get_tags()
         for tag in tags:
-            dbTag = db.session.query(Tag).filter(Tag.name==tag).scalar()
+            dbTag = db.session.query(Tag).filter(Tag.name==tag).one_or_none()
             if not dbTag:
                 dbTag = Tag(name=tag)
             meme_rec.tags.append(dbTag)
@@ -55,7 +55,7 @@ def delete_meme():
         flash('There was an error while processing your request, please try again.', 'error')
         return redirect(url_for("public.home")) # Should never happen
     id = int(id_str)
-    meme_rec = db.session.query(Meme).filter(Meme.id == id).first()
+    meme_rec = db.session.query(Meme).filter(Meme.id == id).one_or_none()
     if not meme_rec:
         flash('Unable to locate meme, it may have been deleted.', 'error')
         return redirect(url_for("public.home"))
@@ -70,7 +70,7 @@ def delete_meme():
 
 @meme_blueprint.route('/meme/image/<path:id>')
 def get_meme_image(id):
-    meme_rec = db.session.query(Meme).filter(Meme.id == id).first()
+    meme_rec = db.session.query(Meme).filter(Meme.id == id).one_or_none()
     if not meme_rec:
         abort(404)
     return send_from_directory(meme_uploads.destination, meme_rec.url)

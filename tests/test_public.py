@@ -14,7 +14,7 @@ class PublicTests(BaseTestClass):
         response = self.client.get('/')
         self.assertEqual(response.status_code, 200)
         self.assertIn('memes', response.text)
-        self.assertIn(f'meme_{meme_id}', response.text)
+        self.assertIn(f'data-meme-id="{meme_id}"', response.text)
 
     def test_home_meme_lazy_load(self):
         self.createTestUser()
@@ -22,8 +22,8 @@ class PublicTests(BaseTestClass):
         last_id = self.createTestMeme('test meme two')
         response = self.client.get(f'/?last_id={last_id}')
         self.assertEqual(response.status_code, 200)
-        self.assertIn(f'meme_{expected_id}', response.text)
-        self.assertNotIn(f'meme_{last_id}', response.text)
+        self.assertIn(f'data-meme-id="{expected_id}"', response.text)
+        self.assertNotIn(f'data-meme-id="{last_id}"', response.text)
 
     def test_about(self):
         """Test the about page"""
