@@ -15,8 +15,8 @@ from website.database.tag_model import Tag
 from website.config import TestConfig
 
 class BaseTestClass(unittest.TestCase):
-    TEST_USER_EMAIL = "unittest@memebank.com"
-    TEST_USERNAME = "unittest"
+    TEST_USER_EMAIL_TEMPLATE = "unittest_{}@memebank.com"
+    TEST_USERNAME_TEMPLATE = "unittest_{}"
     TEST_FIRST_NAME = "Unit"
     TEST_LAST_NAME = "Test"
     TEST_USER_PASSWORD = "TestPassword1"
@@ -42,6 +42,7 @@ class BaseTestClass(unittest.TestCase):
 
     def setUp(self) -> None:
         self.client = self.app.test_client()
+        self.test_user_ids = []
         return super().setUp()
     
     def tearDown(self) -> None:
@@ -52,16 +53,20 @@ class BaseTestClass(unittest.TestCase):
             db.create_all()
             stamp()
 
-    def createTestUser(self):
+    def createTestUser(self) -> int:
+        next_id = self.test_user_ids[-1] + 1 if len(self.test_user_ids) > 0 else 1
+        test_email = BaseTestClass.TEST_USER_EMAIL_TEMPLATE.format(next_id)
+        test_username = BaseTestClass.TEST_USERNAME_TEMPLATE.format(next_id)
         with self.app.app_context():
-            test_user = User(email=BaseTestClass.TEST_USER_EMAIL, username=BaseTestClass.TEST_USERNAME,
+            test_user = User(email=test_email, username=test_username,
                         first_name=BaseTestClass.TEST_FIRST_NAME, last_name=BaseTestClass.TEST_LAST_NAME,
                         password=generate_password_hash(BaseTestClass.TEST_USER_PASSWORD))
             db.session.add(test_user)
             db.session.commit()
-            self.test_user_id = test_user.id
+            self.test_user_ids.append(test_user.id)
+            return test_user.id
 
-    def createTestMeme(self, tags: str):
+    def createTestMeme(self, user_id: int, tags: str) -> int:
         meme_image = path.join(self.test_dir, 'test_meme.jpg')
         meme_uploads_dir = path.join(self.uploads_dir, 'memes')
         if not path.exists(meme_uploads_dir):
@@ -69,7 +74,7 @@ class BaseTestClass(unittest.TestCase):
         copyfile(meme_image, path.join(meme_uploads_dir, 'test_meme.jpg'))
         split_tags = tags.split()
         with self.app.app_context():
-            test_meme = Meme(user_id=self.test_user_id, url='test_meme.jpg')
+            test_meme = Meme(user_id=user_id, url='test_meme.jpg')
 
             for split_tag in split_tags:
                 dbTag = db.session.query(Tag).filter(Tag.name==split_tag).one_or_none()
@@ -80,6 +85,12 @@ class BaseTestClass(unittest.TestCase):
             db.session.add(test_meme)
             db.session.commit()
             return test_meme.id
+        
+    def createTag(self, tag: str):
+        with self.app.app_context():
+            test_tag = Tag(name=tag)
+            db.session.add(test_tag)
+            db.session.commit()
         
     def likeMeme(self, meme_id: int, user_id: int):
         with self.app.app_context():
@@ -93,9 +104,11 @@ class BaseTestClass(unittest.TestCase):
             db.session.commit()
 
     @contextmanager
-    def logged_in_context(self):
+    def logged_in_context(self, user_id: int | None = None):
+        if not user_id:
+            user_id = self.test_user_ids[0]
         with self.app.test_request_context():
-            test_user = db.session.query(User).filter(User.id == self.test_user_id).one()
+            test_user = db.session.query(User).filter(User.id == user_id).one()
             login_user(test_user)
             yield
 

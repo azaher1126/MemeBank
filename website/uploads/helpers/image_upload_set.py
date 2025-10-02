@@ -33,7 +33,7 @@ class ImageUploadSet():
         
         full_path = os.path.join(ImageUploadSet.base_path, self._destination_folder)
         if not os.path.exists(full_path):
-            os.mkdir(full_path)
+            os.makedirs(full_path)
         return full_path
     
     @property
