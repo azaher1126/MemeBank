@@ -25,9 +25,10 @@ def create_app(config: Config = None) -> Flask:
     login_manager.init_app(app)
 
     from .database.user_model import User
+    from .database import db
     @login_manager.user_loader
     def load_user(id):
-        return User.query.get(int(id))
+        return db.session.get(User, int(id))
     
     assets_dir = path.join(path.dirname(path.realpath(__file__)), 'assets')
     app.config['ASSETS_DIR_PATH'] = assets_dir

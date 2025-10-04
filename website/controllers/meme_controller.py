@@ -73,7 +73,7 @@ def get_meme_image(id):
     meme_rec = db.session.query(Meme).filter(Meme.id == id).one_or_none()
     if not meme_rec:
         abort(404)
-    return send_from_directory(meme_uploads.destination, meme_rec.url)
+    return send_from_directory(meme_uploads.destination, meme_rec.url, download_name=f"meme_{meme_rec.id}.jpg")
 
 @meme_blueprint.route('/meme/<path:id>')
 def view_meme(id):

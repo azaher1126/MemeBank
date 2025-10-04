@@ -27,7 +27,7 @@ class DevelopmentConfig(Config):
             self.TESTING = True
 
 class TestConfig(Config):
-    def __init__(self, db_path, uploads_base_path):
+    def __init__(self, db_path, uploads_base_path, csrf_protection = False):
         super().__init__()
 
         self.DB_PATH = db_path
@@ -39,4 +39,4 @@ class TestConfig(Config):
         if not self.RECAPTCHA_PRIVATE_KEY:
             self.RECAPTCHA_PRIVATE_KEY = ''
         self.TESTING = True
-        self.WTF_CSRF_ENABLED = False
+        self.WTF_CSRF_ENABLED = csrf_protection
