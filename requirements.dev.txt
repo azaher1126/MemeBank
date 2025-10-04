@@ -1,0 +1,4 @@
+-r requirements.txt
+
+selenium==4.35.0
+coverage==7.9.2
