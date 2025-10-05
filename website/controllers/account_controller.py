@@ -23,9 +23,9 @@ def register():
     register_form: RegisterForm = RegisterForm()
     if register_form.validate_on_submit():
         email = register_form.email.data
-        email_lowered = email.lower()
+        email_lowered = email.lower() # type: ignore
         username = register_form.username.data
-        username_lowered = username.lower()
+        username_lowered = username.lower() # type: ignore
         first_name = register_form.first_name.data
         last_name = register_form.last_name.data
         password = register_form.password.data
@@ -37,7 +37,7 @@ def register():
             else:
                 flash('Username already exists, please choose another one.', category='error')
         else:
-            new_user = User(email=email, username=username, first_name=first_name, last_name=last_name, password=generate_password_hash(password))
+            new_user = User(email=email, username=username, first_name=first_name, last_name=last_name, password=generate_password_hash(password)) # type: ignore
             db.session.add(new_user)
             db.session.commit()
             login_user(new_user)
@@ -57,9 +57,9 @@ def login():
         email = login_form.username_or_email.data
         password = login_form.password.data
         remember_me = login_form.remember_me.data
-        user = User.query.filter(or_(func.lower(User.email)==email.lower(), func.lower(User.username)==email.lower())).one_or_none()
+        user = User.query.filter(or_(func.lower(User.email)==email.lower(), func.lower(User.username)==email.lower())).one_or_none() # type: ignore
         if user:
-            if check_password_hash(user.password, password):
+            if check_password_hash(user.password, password): # type: ignore
                 flash(f"Welcome {user.first_name}, you have logged in successfully!", category='success')
                 login_user(user, remember=remember_me)
                 next_url = request.args.get('next')
@@ -112,4 +112,4 @@ def get_profile_image(id):
     if not user.profile_url:
         return send_from_directory('assets', 'default_profile.jpg')
     else:
-        return send_from_directory(profile_uploads.config.destination, user.profile_url)
+        return send_from_directory(profile_uploads.destination, user.profile_url)

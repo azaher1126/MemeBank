@@ -1,6 +1,6 @@
 import unittest
 from uuid import uuid4
-from os import path, mkdir, remove, rmdir
+from os import path, mkdir, remove
 from shutil import copyfile, rmtree
 from contextlib import contextmanager
 from flask_migrate import stamp

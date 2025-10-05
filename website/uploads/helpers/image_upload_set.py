@@ -1,17 +1,17 @@
 from typing import IO, Optional
-from pathlib import Path
-from PIL import Image
+from pathvalidate import is_valid_filepath, is_valid_filename, sanitize_filename
+from PIL import Image, UnidentifiedImageError
 from PIL._typing import StrOrBytesPath
 import os
 
 IMAGES = tuple('jpg jpe jpeg png gif svg bmp webp'.split())
 
 def configure_uploads(base_path: str):
-    try:
-        path = Path(base_path)
-        path.mkdir(exist_ok=True)
-    except:
-        raise ValueError("The base uploads path provided does not have valid path syntax!")
+    if not is_valid_filepath(base_path, platform="auto"):
+        raise ValueError(f"The base uploads path provided does not have valid path syntax! Provided: {base_path}")
+    
+    if not os.path.exists(base_path):
+        os.makedirs(base_path)
 
     ImageUploadSet.base_path = base_path
 
@@ -19,12 +19,7 @@ class ImageUploadSet():
     base_path: Optional[str] = None
 
     def __init__(self, destination: str):
-        try:
-            Path(destination)
-        except:
-            raise ValueError("The destination provided does not have valid path syntax!")
-
-        self._destination_folder = destination
+        self._destination_folder = sanitize_filename(destination)
 
     @property
     def destination(self) -> str:
@@ -37,13 +32,11 @@ class ImageUploadSet():
         return full_path
     
     @property
-    def extensions(self) -> tuple[str]:
+    def extensions(self) -> tuple[str, ...]:
         return IMAGES
     
     def save(self, image_data: StrOrBytesPath | IO[bytes], filename: str):
-        try:
-            Path(filename)
-        except:
+        if not is_valid_filename(filename):
             raise ValueError("The filename provided does not have valid path syntax!")
         try:
             image = Image.open(image_data)
@@ -54,7 +47,7 @@ class ImageUploadSet():
                 image = rgb_image
         
             image.save(full_path, format="JPEG")
-        except:
+        except UnidentifiedImageError:
             raise ValueError("The uploaded meme is not in a supported format. Please upload a proper image.")
         
     def delete(self, filename: str):

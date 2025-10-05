@@ -36,7 +36,7 @@ def upload_file():
         try:
             meme_uploads.save(file.stream, file_name)
         except Exception as e:
-            flash(e, category="error")
+            flash(str(e), category="error")
             return render_template('meme/upload.html', upload_form=upload_form)
         
         db.session.add(meme_rec)
@@ -107,7 +107,7 @@ def toggleLike():
     return render_template('components/like_button_snippet.html', meme=MemeType(meme))
 
 @meme_blueprint.route('/search', methods=['GET'])
-def search():
+def search_endpoint():
     '''Gets the string that the user would like to search with then 
     splits it into individual tags and searches the database for each tag.
     It combines all of the memes into a single list and sorts it from newest
@@ -116,8 +116,11 @@ def search():
     if not tags or tags == '':
         flash('Invaild Search!', category='error')
         return redirect(url_for('public.home'))
-    last_id = request.args.get('last_id')
+    last_id_str = request.args.get('last_id')
+    if last_id_str and not last_id_str.isnumeric():
+        abort(400)
     
+    last_id = int(last_id_str) if last_id_str else None
     combined_memes = search(tags, last_id)
     memesT = convert_to_memetype(combined_memes)
     if not last_id:

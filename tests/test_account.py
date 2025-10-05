@@ -161,7 +161,7 @@ class AccountTests(BaseTestClass):
 
     def test_get_nonexistent_profile_image(self):
         """Test retrieve nonexistent profile image"""
-        response = self.client.get(f'/profile/image/nonexistent')
+        response = self.client.get('/profile/image/nonexistent')
         self.assertEqual(response.status_code, 404)
 
     def test_get_unset_profile_image(self):

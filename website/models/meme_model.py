@@ -25,9 +25,9 @@ class MemeType():
         a MemeType object.'''
         self.id = meme.id
         self.url = f'/meme/image/{meme.id}'
-        self.tags = convert_to_tagtype(meme.tags)
-        self.liked = current_user in meme.users_liked
-        self.likes = len(meme.users_liked)
+        self.tags = convert_to_tagtype(meme.tags) # type: ignore
+        self.liked = current_user in meme.users_liked # type: ignore
+        self.likes = len(meme.users_liked) # type: ignore
         self.user_id = meme.user_id
         self.username = meme.uploader.username
         self.username_colour = meme.uploader.username_colour

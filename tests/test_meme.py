@@ -29,7 +29,7 @@ class MemeTests(BaseTestClass):
         self.assertIn(f'/meme/image/{meme_id}', response.text)
 
     def test_view_nonexistent_meme(self):
-        response = self.client.get(f'/meme/1')
+        response = self.client.get('/meme/1')
         self.assertEqual(response.status_code, 404)
 
     def test_meme_search(self):

@@ -26,7 +26,7 @@ class PublicTests(BaseTestClass):
         self.assertNotIn(f'data-meme-id="{last_id}"', response.text)
 
     def test_home_meme_lazy_load_nonexistent(self):
-        response = self.client.get(f'/?last_id=1')
+        response = self.client.get('/?last_id=1')
         self.assertEqual(response.status_code, 404)
 
     def test_about(self):

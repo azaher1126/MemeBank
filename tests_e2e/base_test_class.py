@@ -150,6 +150,9 @@ class BaseTestClass(unittest.TestCase):
             test_user = db.session.query(User).filter(User.id == user_id).one()
             login_user(test_user)
 
+            if not requestContext.session:
+                raise RuntimeError("The session attached to this request context is None. This should not happen.")
+
             response = Response()
             self.app.session_interface.save_session(self.app, requestContext.session, response)
 

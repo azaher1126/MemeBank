@@ -8,7 +8,7 @@ class TimeStamp(sa.types.TypeDecorator):
     def process_bind_param(self, value: datetime, dialect):        
         return value.astimezone(timezone.utc)
 
-    def process_result_value(self, value, dialect):
+    def process_result_value(self, value: datetime, dialect):
         if value.tzinfo is None:
             return value.replace(tzinfo=timezone.utc)
 

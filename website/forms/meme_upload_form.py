@@ -18,5 +18,5 @@ class MemeUploadForm(FlaskForm):
     def get_tags(self):
         if not self.tags.validate(self):
             raise RuntimeError("Form does not contain valid data. Cannot retrieve tags.")
-        tags_data = json.loads(self.tags.data)
+        tags_data = json.loads(self.tags.data) # type: ignore
         return [tag_data["value"] for tag_data in tags_data]
