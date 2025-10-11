@@ -6,6 +6,7 @@ from .controllers import initialize_controllers
 from .database import initialize_database
 from .uploads import initialize_uploads
 from .forms import initialize_forms
+from .templates import initialize_templates
 
 from .config import Config, DevelopmentConfig
 
@@ -36,5 +37,6 @@ def create_app(config: Config | None = None) -> Flask:
     
     initialize_uploads(app)
     initialize_forms(app)
+    initialize_templates(app)
 
     return app

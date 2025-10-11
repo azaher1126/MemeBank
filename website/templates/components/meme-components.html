@@ -1,14 +1,13 @@
 {% macro meme_tags(tags) %}
 <div class="tag-container">
-    <p class="m-0">Tags:</p>
     {% for tag in tags %}
-        <a href="/search?search={{ tag.name }}">{{ tag.name }}</a>
+        <a href="/search?search={{ tag.name | urlencode }}">#{{tag.name}}</a>
     {% endfor %}
 </div> 
 {% endmacro %}
 
 {% macro meme_like_button(meme) %}
-    <button data-meme-id="{{meme.id}}" data-liked="{{meme.liked}}" role="like-button" class="d-flex flex-nowrap align-items-center icon-button white-icon-button">
+    <button data-meme-id="{{meme.id}}" data-liked="{{meme.liked}}" role="like-button" class="d-flex flex-nowrap align-items-center icon-button white-icon-button mt-0-1">
         <p class="mx-1 my-0">{{meme.likes}}</p>
         {% if meme.liked %}
             <svg class="square-1-12" fill="currentColor"><use href="{{url_for('static', filename='sprites/meme-icons.svg')}}#unlike-icon"></use></svg>
@@ -19,14 +18,16 @@
 {% endmacro%}
 
 {% macro meme_preview(meme) %}
-<div class="meme font-size-1-12" data-meme-id="{{meme.id}}">
-    <a href="/profile/{{meme.username}}" data-username-color="{{meme.username_colour}}" class="meme-username">{{meme.username}}</a>
+<div class="meme font-size-1-12 rounded" data-meme-id="{{meme.id}}">
     <a href="/meme/{{meme.id}}" class="text-decoration-none">
-        <img class="rounded" src="{{meme.url}}" width="300px" height="300px" alt="Meme {{meme.url}} image">
+        <img class="rounded" src="{{meme.url}}" alt="Meme {{meme.id}} image">
     </a>
-    <div class="d-flex flex-nowrap align-items-center justify-content-between">
-        {{ meme_tags(meme.tags) }}
-        {{ meme_like_button(meme) }}
+    <div class="px-2 mt-3 mb-2">
+        <a href="/profile/{{meme.username}}" data-username-color="{{meme.username_colour}}" class="meme-username">{{meme.username}}</a>
+        <div class="d-flex flex-nowrap align-items-center justify-content-between">
+            {{ meme_tags(meme.tags) }}
+            {{ meme_like_button(meme) }}
+        </div>
     </div>
 </div>
 {% endmacro %}

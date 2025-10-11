@@ -12,7 +12,7 @@
 <div class="d-flex flex-column align-items-center font-size-1-12">
   <div class="d-flex flex-column">
     <a href="/profile/{{meme.username}}" id="profile-username"
-      data-username-color="{{meme.username_colour}}">{{meme.username}}</a>
+      data-username-color="{{meme.username_colour}}" class="meme-username">{{meme.username}}</a>
     <img class="rounded mw-100 mh-70vh" src="{{meme.url}}" alt="Meme {{meme.id}} image">
     <div class="d-flex flex-nowrap align-items-center justify-content-between">
       {{ meme_comps.meme_tags(meme.tags) }}

@@ -1,0 +1,30 @@
+{% macro navbar_link(link, text) %}
+{% if request.path == link %}
+<a href="{{link}}" class="nav-item nav-link active">{{text}}</a>
+{% else %}
+<a href="{{link}}" class="nav-item nav-link">{{text}}</a>
+{% endif %}
+{% endmacro %}
+
+{% macro sidebar_link(text, link) %}
+{% if request.full_path == link %}
+<a href="{{link}}" class="link-button active">{{text}}</a>
+{% else %}
+<a href="{{link}}" class="link-button">{{text}}</a>
+{% endif %}
+{% endmacro %}
+
+{% macro sidebar(title, links) %}
+<div class="secondary-background sidebar">
+    <button id="sidebar-toggle">
+        <h4 class="title">{{title}}</h4>
+    </button>
+    <ul id="sidebar-links" class="nav nav-pills flex-column hidden">
+        {% for link in links %}
+        <li class="nav-item">
+            {{ sidebar_link(link[0], link[1])}}
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endmacro %}

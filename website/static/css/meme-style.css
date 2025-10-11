@@ -6,10 +6,17 @@
 }
 .meme {
     margin: 0.5rem;
-    width: 300px;
+    width: 332px;
+    background-color: var(--secondary-background-color);
+    transition: transform 0.15s ease-in-out;
+}
+.meme:hover {
+    transform: translateY(-4px) scale(1.015);
 }
 .meme img {
-    aspect-ratio: 1;
+    aspect-ratio: 1.35;
+    width: 100%;
+    object-fit: cover;
 }
 .meme p {
     margin: 0;
@@ -21,4 +28,10 @@
 }
 .tag-container a {
     margin: 0 0.2rem;
+}
+.meme-username {
+    transition: filter 0.15s ease-in-out;
+}
+.meme-username:hover {
+    filter: brightness(70%)
 }
